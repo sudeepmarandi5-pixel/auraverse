@@ -5,7 +5,7 @@
 
 import { Product, Category, BannerSettings } from '../types';
 import { INITIAL_PRODUCTS, INITIAL_CATEGORIES, INITIAL_BANNER_SETTINGS } from '../data/initialData';
-import { db, isFirebaseConfigured } from '../lib/firebase';
+import { db, isFirebaseConfigured, handleFirestoreError, OperationType } from '../lib/firebase';
 import {
   collection,
   doc,
@@ -13,6 +13,7 @@ import {
   setDoc,
   deleteDoc,
   getDoc,
+  writeBatch,
 } from 'firebase/firestore';
 
 const PRODUCTS_STORAGE_KEY = 'yatrababa_products_v2';
@@ -21,6 +22,29 @@ const BANNER_STORAGE_KEY = 'yatrababa_banner_v2';
 const WISHLIST_STORAGE_KEY = 'yatrababa_wishlist_v2';
 
 export class StoreService {
+  // --- Seed initial data to Firestore ---
+  static async seedFirestore(): Promise<void> {
+    if (!isFirebaseConfigured || !db) return;
+
+    try {
+      // Seed products
+      for (const prod of INITIAL_PRODUCTS) {
+        await setDoc(doc(db, 'products', prod.id), prod, { merge: true });
+      }
+
+      // Seed categories
+      for (const cat of INITIAL_CATEGORIES) {
+        await setDoc(doc(db, 'categories', cat.id), cat, { merge: true });
+      }
+
+      // Seed banner
+      await setDoc(doc(db, 'settings', 'banner'), INITIAL_BANNER_SETTINGS, { merge: true });
+      console.info('Firestore seeded with initial editorial data successfully.');
+    } catch (err) {
+      console.warn('Seed to Firestore error:', err);
+    }
+  }
+
   // --- Products ---
   static async getProducts(): Promise<Product[]> {
     if (isFirebaseConfigured && db) {
@@ -29,10 +53,15 @@ export class StoreService {
         if (!querySnapshot.empty) {
           const prods: Product[] = [];
           querySnapshot.forEach((d) => prods.push({ id: d.id, ...d.data() } as Product));
+          localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(prods));
           return prods;
+        } else {
+          // Auto-seed if newly provisioned database is empty
+          await this.seedFirestore();
+          return INITIAL_PRODUCTS;
         }
       } catch (err) {
-        console.warn('Firestore fetch failed, falling back to local store:', err);
+        handleFirestoreError(err, OperationType.LIST, 'products');
       }
     }
 
@@ -44,7 +73,6 @@ export class StoreService {
         // fallback
       }
     }
-    // Seed initial
     localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(INITIAL_PRODUCTS));
     return INITIAL_PRODUCTS;
   }
@@ -58,14 +86,13 @@ export class StoreService {
     } else {
       products.unshift(product);
     }
-
     localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(products));
 
     if (isFirebaseConfigured && db) {
       try {
-        await setDoc(doc(db, 'products', product.id), product);
+        await setDoc(doc(db, 'products', product.id), product, { merge: true });
       } catch (err) {
-        console.warn('Firestore product write failed:', err);
+        handleFirestoreError(err, OperationType.WRITE, `products/${product.id}`);
       }
     }
   }
@@ -79,7 +106,7 @@ export class StoreService {
       try {
         await deleteDoc(doc(db, 'products', id));
       } catch (err) {
-        console.warn('Firestore product delete failed:', err);
+        handleFirestoreError(err, OperationType.DELETE, `products/${id}`);
       }
     }
   }
@@ -92,10 +119,11 @@ export class StoreService {
         if (!snapshot.empty) {
           const cats: Category[] = [];
           snapshot.forEach((d) => cats.push({ id: d.id, ...d.data() } as Category));
+          localStorage.setItem(CATEGORIES_STORAGE_KEY, JSON.stringify(cats));
           return cats;
         }
       } catch (err) {
-        console.warn('Firestore categories fetch notice:', err);
+        handleFirestoreError(err, OperationType.LIST, 'categories');
       }
     }
 
@@ -123,9 +151,9 @@ export class StoreService {
 
     if (isFirebaseConfigured && db) {
       try {
-        await setDoc(doc(db, 'categories', category.id), category);
+        await setDoc(doc(db, 'categories', category.id), category, { merge: true });
       } catch (err) {
-        console.warn('Firestore category write failed:', err);
+        handleFirestoreError(err, OperationType.WRITE, `categories/${category.id}`);
       }
     }
   }
@@ -139,7 +167,7 @@ export class StoreService {
       try {
         await deleteDoc(doc(db, 'categories', id));
       } catch (err) {
-        console.warn('Firestore category delete failed:', err);
+        handleFirestoreError(err, OperationType.DELETE, `categories/${id}`);
       }
     }
   }
@@ -150,10 +178,12 @@ export class StoreService {
       try {
         const snap = await getDoc(doc(db, 'settings', 'banner'));
         if (snap.exists()) {
-          return snap.data() as BannerSettings;
+          const data = snap.data() as BannerSettings;
+          localStorage.setItem(BANNER_STORAGE_KEY, JSON.stringify(data));
+          return data;
         }
       } catch (err) {
-        console.warn('Firestore banner fetch notice:', err);
+        handleFirestoreError(err, OperationType.GET, 'settings/banner');
       }
     }
 
@@ -174,9 +204,9 @@ export class StoreService {
 
     if (isFirebaseConfigured && db) {
       try {
-        await setDoc(doc(db, 'settings', 'banner'), settings);
+        await setDoc(doc(db, 'settings', 'banner'), settings, { merge: true });
       } catch (err) {
-        console.warn('Firestore banner save failed:', err);
+        handleFirestoreError(err, OperationType.WRITE, 'settings/banner');
       }
     }
   }
@@ -199,11 +229,12 @@ export class StoreService {
     return updated;
   }
 
-  // Reset to initial demo data
-  static resetToDefault(): { products: Product[]; categories: Category[]; banner: BannerSettings } {
+  // Reset to initial demo data & re-sync to Firestore
+  static async resetToDefault(): Promise<{ products: Product[]; categories: Category[]; banner: BannerSettings }> {
     localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(INITIAL_PRODUCTS));
     localStorage.setItem(CATEGORIES_STORAGE_KEY, JSON.stringify(INITIAL_CATEGORIES));
     localStorage.setItem(BANNER_STORAGE_KEY, JSON.stringify(INITIAL_BANNER_SETTINGS));
+    await this.seedFirestore();
     return {
       products: INITIAL_PRODUCTS,
       categories: INITIAL_CATEGORIES,

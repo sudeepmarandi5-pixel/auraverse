@@ -1,0 +1,87 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEditorOrAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'sudeep.marandi5@gmail.com' ||
+        request.auth.token.email == 'editor@yatrababa.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isValidProduct(data) {
+      return data.keys().hasAll(['id', 'title', 'brand', 'category', 'price', 'imageUrl', 'amazonUrl', 'status'])
+        && data.title is string && data.title.size() <= 200
+        && data.brand is string && data.brand.size() <= 100
+        && data.category is string && data.category.size() <= 100
+        && (data.price is number || data.price is int) && data.price >= 0
+        && data.imageUrl is string && data.imageUrl.size() <= 1000
+        && data.amazonUrl is string && data.amazonUrl.size() <= 1000
+        && data.status in ['published', 'draft'];
+    }
+
+    function isValidCategory(data) {
+      return data.keys().hasAll(['id', 'name', 'slug', 'imageUrl'])
+        && data.name is string && data.name.size() <= 100
+        && data.slug is string && data.slug.size() <= 100
+        && data.imageUrl is string && data.imageUrl.size() <= 1000;
+    }
+
+    function isValidBannerSettings(data) {
+      return data.keys().hasAll(['headline', 'subheadline', 'ctaText', 'imageUrl'])
+        && data.headline is string && data.headline.size() <= 200
+        && data.subheadline is string && data.subheadline.size() <= 1000
+        && data.ctaText is string && data.ctaText.size() <= 100
+        && data.imageUrl is string && data.imageUrl.size() <= 1000;
+    }
+
+    // Products collection: public can read, editors can manage
+    match /products/{productId} {
+      allow read: if true;
+      allow create: if isEditorOrAdmin() && isValidId(productId) && isValidProduct(request.resource.data);
+      allow update: if isEditorOrAdmin() && isValidId(productId) && isValidProduct(request.resource.data);
+      allow delete: if isEditorOrAdmin() && isValidId(productId);
+    }
+
+    // Categories collection: public can read, editors can manage
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow create: if isEditorOrAdmin() && isValidId(categoryId) && isValidCategory(request.resource.data);
+      allow update: if isEditorOrAdmin() && isValidId(categoryId) && isValidCategory(request.resource.data);
+      allow delete: if isEditorOrAdmin() && isValidId(categoryId);
+    }
+
+    // Settings collection: banner settings
+    match /settings/{settingId} {
+      allow read: if true;
+      allow create, update: if isEditorOrAdmin() && isValidId(settingId) && isValidBannerSettings(request.resource.data);
+      allow delete: if isEditorOrAdmin() && isValidId(settingId);
+    }
+
+    // Admins registry: only existing admin can read or write
+    match /admins/{adminId} {
+      allow read, write: if isEditorOrAdmin() && isValidId(adminId);
+    }
+
+    // Connection health check document
+    match /test/{docId} {
+      allow read: if true;
+    }
+  }
+}

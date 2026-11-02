@@ -1,0 +1,74 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "Curated fashion garment or accessory",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "brand": { "type": "string", "maxLength": 100 },
+        "category": { "type": "string", "maxLength": 100 },
+        "price": { "type": "number" },
+        "originalPrice": { "type": "number" },
+        "rating": { "type": "number" },
+        "reviewCount": { "type": "number" },
+        "imageUrl": { "type": "string", "maxLength": 1000 },
+        "secondaryImageUrl": { "type": "string", "maxLength": 1000 },
+        "amazonUrl": { "type": "string", "maxLength": 1000 },
+        "description": { "type": "string", "maxLength": 2000 },
+        "material": { "type": "string", "maxLength": 500 },
+        "fitDetails": { "type": "string", "maxLength": 500 },
+        "isFeatured": { "type": "boolean" },
+        "isTrending": { "type": "boolean" },
+        "isNew": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["published", "draft"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "title", "brand", "category", "price", "imageUrl", "amazonUrl", "status"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Wardrobe collection taxonomy",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 100 },
+        "slug": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "imageUrl": { "type": "string", "maxLength": 1000 },
+        "itemCount": { "type": "number" }
+      },
+      "required": ["id", "name", "slug", "imageUrl"]
+    },
+    "BannerSettings": {
+      "title": "BannerSettings",
+      "description": "Homepage hero banner and seasonal ticker settings",
+      "type": "object",
+      "properties": {
+        "issueNumber": { "type": "string", "maxLength": 100 },
+        "headline": { "type": "string", "maxLength": 200 },
+        "subheadline": { "type": "string", "maxLength": 1000 },
+        "ctaText": { "type": "string", "maxLength": 100 },
+        "ctaLink": { "type": "string", "maxLength": 200 },
+        "imageUrl": { "type": "string", "maxLength": 1000 },
+        "announcement": { "type": "string", "maxLength": 500 }
+      },
+      "required": ["headline", "subheadline", "ctaText", "imageUrl"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Storefront fashion garments and accessories"
+    },
+    "/categories/{categoryId}": {
+      "schema": "Category",
+      "description": "Wardrobe collection categories"
+    },
+    "/settings/{settingId}": {
+      "schema": "BannerSettings",
+      "description": "Global storefront settings such as hero banner and announcement"
+    }
+  }
+}

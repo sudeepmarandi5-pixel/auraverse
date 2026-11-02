@@ -18,6 +18,8 @@ import { AdminDashboard } from './components/AdminDashboard';
 import { Footer } from './components/Footer';
 import { Toast } from './components/Toast';
 
+import { testConnection } from './lib/firebase';
+
 export default function App() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -39,6 +41,7 @@ export default function App() {
   // Initialize data on mount
   useEffect(() => {
     async function loadData() {
+      await testConnection();
       const prods = await StoreService.getProducts();
       const cats = await StoreService.getCategories();
       const banner = await StoreService.getBannerSettings();
@@ -116,8 +119,8 @@ export default function App() {
     setBannerSettings(settings);
   };
 
-  const handleResetData = () => {
-    const fresh = StoreService.resetToDefault();
+  const handleResetData = async () => {
+    const fresh = await StoreService.resetToDefault();
     setProducts(fresh.products);
     setCategories(fresh.categories);
     setBannerSettings(fresh.banner);

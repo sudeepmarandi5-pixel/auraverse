@@ -231,6 +231,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <p className="text-xs font-sans tracking-[0.12em] uppercase text-[#171717]/60 mt-1">
                   Authenticate with your Yatrababa credentials
                 </p>
+                <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#F5F0E8] border border-[#D8C3A5] text-[10px] uppercase font-sans tracking-widest text-[#171717]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                  <span>Cloud Firestore Online</span>
+                </div>
               </div>
 
               <form
@@ -266,7 +270,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   />
                 </div>
 
-                <div className="pt-2">
+                <div className="pt-2 space-y-2">
                   <button
                     type="submit"
                     className="w-full py-3 bg-[#171717] text-white hover:bg-[#D8C3A5] hover:text-[#171717] text-xs font-sans tracking-[0.18em] uppercase font-semibold transition-colors cursor-pointer"
@@ -276,7 +280,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
 
                 <p className="text-[10px] font-sans text-center text-[#171717]/60 tracking-[0.1em] uppercase pt-2">
-                  Pre-configured for editorial access · Instant Login Enabled
+                  Verified for sudeep.marandi5@gmail.com · Instant Login Enabled
                 </p>
               </form>
             </div>
