@@ -79,9 +79,9 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           {/* Right Column: Hero Editorial Photography */}
           <div className="lg:col-span-6 relative">
             <div className="relative aspect-[4/5] sm:aspect-[16/10] lg:aspect-[4/5] w-full bg-[#F5F0E8] border border-[#E8DFD3] overflow-hidden group">
-              {/* Fallback architectural container if image fails or loading */}
-              {(!imgLoaded || imgError) && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-gradient-to-br from-[#F5F0E8] via-[#FFFFFF] to-[#F5F0E8] text-center">
+              {/* Fallback architectural container only if image fails */}
+              {imgError && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-gradient-to-br from-[#F5F0E8] via-[#FFFFFF] to-[#F5F0E8] text-center z-1">
                   <div className="w-16 h-16 rounded-full border border-[#D8C3A5] flex items-center justify-center mb-4">
                     <Sparkles className="w-6 h-6 text-[#D8C3A5]" />
                   </div>
@@ -97,12 +97,8 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
               <img
                 src={settings.imageUrl}
                 alt="Yatrababa High Fashion Editorial Autumn Edit"
-                referrerPolicy="no-referrer"
-                onLoad={() => setImgLoaded(true)}
                 onError={() => setImgError(true)}
-                className={`w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105 ${
-                  imgLoaded && !imgError ? 'opacity-100' : 'opacity-0'
-                }`}
+                className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
               />
 
               {/* Editorial Caption Tag in Corner */}

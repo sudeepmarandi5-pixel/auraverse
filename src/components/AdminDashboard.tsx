@@ -535,7 +535,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                   <img
                                     src={p.imageUrl}
                                     alt={p.title}
-                                    referrerPolicy="no-referrer"
                                     className="w-full h-full object-cover"
                                   />
                                 </div>
@@ -632,7 +631,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           <img
                             src={c.imageUrl}
                             alt={c.name}
-                            referrerPolicy="no-referrer"
                             className="w-full h-full object-cover"
                           />
                         </div>

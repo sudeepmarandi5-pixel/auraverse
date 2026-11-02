@@ -20,7 +20,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onToggleWishlist,
   onQuickView,
 }) => {
-  const [imgLoaded, setImgLoaded] = useState(false);
   const [imgError, setImgError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -37,8 +36,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     >
       {/* Visual Container (3:4 ratio standard for high-fashion editorial) */}
       <div className="relative aspect-[3/4] w-full bg-[#F5F0E8] overflow-hidden">
-        {(!imgLoaded || imgError) && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-[#F5F0E8] text-center">
+        {imgError && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-[#F5F0E8] text-center z-1">
             <Sparkles className="w-6 h-6 text-[#D8C3A5] mb-2" />
             <span className="font-serif text-sm text-[#171717] line-clamp-1">
               {product.title}
@@ -52,12 +51,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <img
           src={currentImg}
           alt={product.title}
-          referrerPolicy="no-referrer"
-          onLoad={() => setImgLoaded(true)}
+          loading="lazy"
           onError={() => setImgError(true)}
-          className={`w-full h-full object-cover object-center transition-all duration-700 ease-out group-hover:scale-105 ${
-            imgLoaded && !imgError ? 'opacity-100' : 'opacity-0'
-          }`}
+          className="w-full h-full object-cover object-center transition-all duration-700 ease-out group-hover:scale-105"
         />
 
         {/* Wishlist Button (Top Right) */}

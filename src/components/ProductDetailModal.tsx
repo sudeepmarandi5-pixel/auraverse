@@ -65,7 +65,6 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               <img
                 src={activeImage}
                 alt={product.title}
-                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover transition-all duration-300"
               />
             </div>
@@ -84,7 +83,6 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   <img
                     src={product.imageUrl}
                     alt="Main angle"
-                    referrerPolicy="no-referrer"
                     className="w-full h-full object-cover"
                   />
                 </button>
@@ -99,7 +97,6 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   <img
                     src={product.secondaryImageUrl}
                     alt="Secondary angle"
-                    referrerPolicy="no-referrer"
                     className="w-full h-full object-cover"
                   />
                 </button>

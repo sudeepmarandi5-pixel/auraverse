@@ -53,8 +53,13 @@ export class StoreService {
         if (!querySnapshot.empty) {
           const prods: Product[] = [];
           querySnapshot.forEach((d) => prods.push({ id: d.id, ...d.data() } as Product));
-          if (!prods.some((p) => p.id === 'prod-saree-ivory-sage')) {
-            const saree = INITIAL_PRODUCTS[0];
+          const saree = INITIAL_PRODUCTS[0];
+          const existingSaree = prods.find((p) => p.id === 'prod-saree-ivory-sage');
+          if (existingSaree) {
+            existingSaree.imageUrl = saree.imageUrl;
+            existingSaree.secondaryImageUrl = saree.secondaryImageUrl;
+            setDoc(doc(db, 'products', saree.id), existingSaree, { merge: true }).catch(() => {});
+          } else {
             prods.unshift(saree);
             setDoc(doc(db, 'products', saree.id), saree, { merge: true }).catch(() => {});
           }
@@ -74,10 +79,15 @@ export class StoreService {
     if (local) {
       try {
         const parsed: Product[] = JSON.parse(local);
-        if (!parsed.some((p) => p.id === 'prod-saree-ivory-sage')) {
-          parsed.unshift(INITIAL_PRODUCTS[0]);
-          localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(parsed));
+        const saree = INITIAL_PRODUCTS[0];
+        const existingSaree = parsed.find((p) => p.id === 'prod-saree-ivory-sage');
+        if (existingSaree) {
+          existingSaree.imageUrl = saree.imageUrl;
+          existingSaree.secondaryImageUrl = saree.secondaryImageUrl;
+        } else {
+          parsed.unshift(saree);
         }
+        localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(parsed));
         return parsed;
       } catch {
         // fallback
@@ -129,6 +139,11 @@ export class StoreService {
         if (!snapshot.empty) {
           const cats: Category[] = [];
           snapshot.forEach((d) => cats.push({ id: d.id, ...d.data() } as Category));
+          const sareeCat = INITIAL_CATEGORIES.find((c) => c.id === 'cat-3');
+          const existingCat = cats.find((c) => c.id === 'cat-3');
+          if (existingCat && sareeCat) {
+            existingCat.imageUrl = sareeCat.imageUrl;
+          }
           localStorage.setItem(CATEGORIES_STORAGE_KEY, JSON.stringify(cats));
           return cats;
         }
@@ -140,7 +155,14 @@ export class StoreService {
     const local = localStorage.getItem(CATEGORIES_STORAGE_KEY);
     if (local) {
       try {
-        return JSON.parse(local);
+        const parsed: Category[] = JSON.parse(local);
+        const sareeCat = INITIAL_CATEGORIES.find((c) => c.id === 'cat-3');
+        const existingCat = parsed.find((c) => c.id === 'cat-3');
+        if (existingCat && sareeCat) {
+          existingCat.imageUrl = sareeCat.imageUrl;
+        }
+        localStorage.setItem(CATEGORIES_STORAGE_KEY, JSON.stringify(parsed));
+        return parsed;
       } catch {
         // fallback
       }

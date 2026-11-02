@@ -123,7 +123,6 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   <img
                     src={item.imageUrl}
                     alt={item.title}
-                    referrerPolicy="no-referrer"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                   />
                 </div>

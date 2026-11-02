@@ -47,8 +47,8 @@ export const FeaturedEditorial: React.FC<FeaturedEditorialProps> = ({
           {/* Left: Large Editorial Image Card */}
           <div className="lg:col-span-7 bg-white border border-[#E8DFD3] p-6 sm:p-8 flex flex-col justify-between">
             <div className="relative aspect-[16/10] sm:aspect-[16/11] w-full bg-[#F5F0E8] overflow-hidden mb-6">
-              {(!imgLoaded || imgError) && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-[#F5F0E8] text-center">
+              {imgError && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-[#F5F0E8] text-center z-1">
                   <Sparkles className="w-8 h-8 text-[#D8C3A5] mb-2" />
                   <span className="font-serif text-2xl text-[#171717]">The Neutral Wardrobe</span>
                   <span className="text-xs uppercase tracking-widest text-[#171717]/60 mt-1">Editorial Vol. 04</span>
@@ -58,12 +58,8 @@ export const FeaturedEditorial: React.FC<FeaturedEditorialProps> = ({
               <img
                 src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1200&auto=format&fit=crop"
                 alt="Editorial Capsule Wardrobe Collection"
-                referrerPolicy="no-referrer"
-                onLoad={() => setImgLoaded(true)}
                 onError={() => setImgError(true)}
-                className={`w-full h-full object-cover transition-transform duration-700 hover:scale-105 ${
-                  imgLoaded && !imgError ? 'opacity-100' : 'opacity-0'
-                }`}
+                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
               />
             </div>
 
@@ -115,7 +111,6 @@ export const FeaturedEditorial: React.FC<FeaturedEditorialProps> = ({
                       <img
                         src={piece.imageUrl}
                         alt={piece.title}
-                        referrerPolicy="no-referrer"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </div>

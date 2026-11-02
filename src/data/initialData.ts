@@ -4,6 +4,7 @@
  */
 
 import { Product, Category, BannerSettings } from '../types';
+import sareeImage from '../assets/images/saree_ivory_sage.jpeg';
 
 export const INITIAL_CATEGORIES: Category[] = [
   {
@@ -27,7 +28,7 @@ export const INITIAL_CATEGORIES: Category[] = [
     name: 'Minimalist Dresses & Sarees',
     slug: 'dresses',
     description: 'Fluid bias-cut silk slips, sculptural sarees with antique zari borders, and modern evening couture.',
-    imageUrl: '/assets/aistudio/Elegant_White_Saree_with_Sage_Green_Blouse_____Ethnic_Fashion_f023b3b4.jpeg',
+    imageUrl: sareeImage,
     itemCount: 8,
   },
   {
@@ -66,8 +67,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     originalPrice: 290.00,
     rating: 5.0,
     reviewCount: 128,
-    imageUrl: '/assets/aistudio/Elegant_White_Saree_with_Sage_Green_Blouse_____Ethnic_Fashion_f023b3b4.jpeg',
-    secondaryImageUrl: '/assets/aistudio/Elegant_White_Saree_with_Sage_Green_Blouse_____Ethnic_Fashion_f023b3b4.jpeg',
+    imageUrl: sareeImage,
+    secondaryImageUrl: sareeImage,
     amazonUrl: 'https://www.amazon.com/dp/B08XWN76P9?tag=yatrababa-20',
     description: 'Ethereal pure ivory georgette saree featuring an intricately hand-embroidered antique gold zari scalloped border. Paired with a structured sage green collared silk blouse with matching cuff embroidery.',
     material: 'Pure Viscose Georgette Saree, Raw Silk Collared Blouse, Antique Gold Zari',

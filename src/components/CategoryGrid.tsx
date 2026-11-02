@@ -71,7 +71,6 @@ const CategoryCard: React.FC<{
   isSelected: boolean;
   onSelect: () => void;
 }> = ({ category, isSelected, onSelect }) => {
-  const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
 
   return (
@@ -85,8 +84,8 @@ const CategoryCard: React.FC<{
     >
       {/* Category Image container */}
       <div className="relative aspect-[4/3] w-full bg-[#F5F0E8] overflow-hidden">
-        {(!loaded || error) && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-[#F5F0E8] text-center">
+        {error && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-[#F5F0E8] text-center z-1">
             <Sparkles className="w-6 h-6 text-[#D8C3A5] mb-2" />
             <span className="font-serif text-lg text-[#171717]">{category.name}</span>
           </div>
@@ -95,12 +94,9 @@ const CategoryCard: React.FC<{
         <img
           src={category.imageUrl}
           alt={category.name}
-          referrerPolicy="no-referrer"
-          onLoad={() => setLoaded(true)}
+          loading="lazy"
           onError={() => setError(true)}
-          className={`w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 ${
-            loaded && !error ? 'opacity-100' : 'opacity-0'
-          }`}
+          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
 
         {/* Subtle light scrim on hover */}
