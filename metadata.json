@@ -1,0 +1,6 @@
+{
+  "name": "Yatrababa — Curated Women's Fashion",
+  "description": "An elegant, minimalist women's fashion discovery and editorial platform featuring curated wardrobe essentials, trending edits, and Amazon collections in a refined white, black, and beige aesthetic.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
