@@ -24,11 +24,11 @@ export const INITIAL_CATEGORIES: Category[] = [
   },
   {
     id: 'cat-3',
-    name: 'Minimalist Dresses',
+    name: 'Minimalist Dresses & Sarees',
     slug: 'dresses',
-    description: 'Fluid bias-cut silk slips, sculptural column silhouettes, and day-to-evening tailoring.',
-    imageUrl: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=1000&auto=format&fit=crop',
-    itemCount: 7,
+    description: 'Fluid bias-cut silk slips, sculptural sarees with antique zari borders, and modern evening couture.',
+    imageUrl: '/assets/aistudio/Elegant_White_Saree_with_Sage_Green_Blouse_____Ethnic_Fashion_f023b3b4.jpeg',
+    itemCount: 8,
   },
   {
     id: 'cat-4',
@@ -57,6 +57,27 @@ export const INITIAL_CATEGORIES: Category[] = [
 ];
 
 export const INITIAL_PRODUCTS: Product[] = [
+  {
+    id: 'prod-saree-ivory-sage',
+    title: 'Pure Ivory Georgette Saree with Zari Border',
+    brand: 'Yatrababa Couture',
+    category: 'dresses',
+    price: 245.00,
+    originalPrice: 290.00,
+    rating: 5.0,
+    reviewCount: 128,
+    imageUrl: '/assets/aistudio/Elegant_White_Saree_with_Sage_Green_Blouse_____Ethnic_Fashion_f023b3b4.jpeg',
+    secondaryImageUrl: '/assets/aistudio/Elegant_White_Saree_with_Sage_Green_Blouse_____Ethnic_Fashion_f023b3b4.jpeg',
+    amazonUrl: 'https://www.amazon.com/dp/B08XWN76P9?tag=yatrababa-20',
+    description: 'Ethereal pure ivory georgette saree featuring an intricately hand-embroidered antique gold zari scalloped border. Paired with a structured sage green collared silk blouse with matching cuff embroidery.',
+    material: 'Pure Viscose Georgette Saree, Raw Silk Collared Blouse, Antique Gold Zari',
+    fitDetails: 'Classic 5.5m saree length with unstitched 0.8m blouse piece. Fluid drape suitable for all heights.',
+    isFeatured: true,
+    isTrending: true,
+    isNew: true,
+    status: 'published',
+    createdAt: '2026-11-01T12:00:00Z',
+  },
   {
     id: 'prod-1',
     title: 'Double-Faced Cashmere Trench Robe',

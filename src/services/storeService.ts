@@ -53,6 +53,11 @@ export class StoreService {
         if (!querySnapshot.empty) {
           const prods: Product[] = [];
           querySnapshot.forEach((d) => prods.push({ id: d.id, ...d.data() } as Product));
+          if (!prods.some((p) => p.id === 'prod-saree-ivory-sage')) {
+            const saree = INITIAL_PRODUCTS[0];
+            prods.unshift(saree);
+            setDoc(doc(db, 'products', saree.id), saree, { merge: true }).catch(() => {});
+          }
           localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(prods));
           return prods;
         } else {
@@ -68,7 +73,12 @@ export class StoreService {
     const local = localStorage.getItem(PRODUCTS_STORAGE_KEY);
     if (local) {
       try {
-        return JSON.parse(local);
+        const parsed: Product[] = JSON.parse(local);
+        if (!parsed.some((p) => p.id === 'prod-saree-ivory-sage')) {
+          parsed.unshift(INITIAL_PRODUCTS[0]);
+          localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(parsed));
+        }
+        return parsed;
       } catch {
         // fallback
       }
