@@ -23,6 +23,7 @@ import {
   Lock,
 } from 'lucide-react';
 import { Product, Category, BannerSettings } from '../types';
+import { ImageUploader } from './ImageUploader';
 
 interface AdminDashboardProps {
   isOpen: boolean;
@@ -757,32 +758,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-[11px] font-sans tracking-[0.14em] uppercase text-[#171717] font-medium mb-1">
-                        Hero Fashion Image URL
-                      </label>
-                      <input
-                        type="url"
-                        value={bannerForm.imageUrl}
-                        onChange={(e) =>
-                          setBannerForm({ ...bannerForm, imageUrl: e.target.value })
-                        }
-                        className="w-full px-3 py-2 bg-white border border-[#E8DFD3] text-xs font-sans text-[#171717] focus:outline-none focus:border-[#171717]"
-                      />
-
-                      {/* Image Preview */}
-                      <div className="mt-3 relative aspect-[16/9] w-full max-w-md bg-[#F5F0E8] border border-[#E8DFD3] overflow-hidden">
-                        <img
-                          src={bannerForm.imageUrl}
-                          alt="Hero Live Preview"
-                          referrerPolicy="no-referrer"
-                          className="w-full h-full object-cover"
-                        />
-                        <span className="absolute bottom-2 left-2 text-[10px] font-sans tracking-[0.1em] uppercase bg-white/90 px-2 py-0.5 border border-[#E8DFD3]">
-                          Live Preview
-                        </span>
-                      </div>
-                    </div>
+                    <ImageUploader
+                      label="Hero Editorial Campaign Photo"
+                      value={bannerForm.imageUrl}
+                      onChange={(url) => setBannerForm({ ...bannerForm, imageUrl: url })}
+                      folder="banner"
+                      aspectRatio="16/9"
+                      helperText="Recommended 16:9 high-resolution landscape photograph for the homepage hero spread"
+                      required
+                    />
 
                     <div className="pt-4 border-t border-[#E8DFD3]">
                       <button
@@ -922,37 +906,31 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[10px] tracking-[0.14em] uppercase text-[#171717]/80 font-semibold mb-1">
-                    Primary Image URL
-                  </label>
-                  <input
-                    type="url"
-                    required
-                    value={editingProduct.imageUrl}
-                    onChange={(e) =>
-                      setEditingProduct({ ...editingProduct, imageUrl: e.target.value })
-                    }
-                    className="w-full px-3 py-2 bg-white border border-[#E8DFD3] text-xs focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[10px] tracking-[0.14em] uppercase text-[#171717]/80 font-semibold mb-1">
-                    Secondary Image URL (Optional)
-                  </label>
-                  <input
-                    type="url"
-                    value={editingProduct.secondaryImageUrl || ''}
-                    onChange={(e) =>
-                      setEditingProduct({
-                        ...editingProduct,
-                        secondaryImageUrl: e.target.value,
-                      })
-                    }
-                    className="w-full px-3 py-2 bg-white border border-[#E8DFD3] text-xs focus:outline-none"
-                  />
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <ImageUploader
+                  label="Primary Garment Image"
+                  value={editingProduct.imageUrl}
+                  onChange={(url) =>
+                    setEditingProduct({ ...editingProduct, imageUrl: url })
+                  }
+                  folder="products"
+                  aspectRatio="3/4"
+                  helperText="Portrait 3:4 ratio recommended"
+                  required
+                />
+                <ImageUploader
+                  label="Secondary Angle (Optional)"
+                  value={editingProduct.secondaryImageUrl || ''}
+                  onChange={(url) =>
+                    setEditingProduct({
+                      ...editingProduct,
+                      secondaryImageUrl: url,
+                    })
+                  }
+                  folder="products"
+                  aspectRatio="3/4"
+                  helperText="Shown on hover or thumbnail click"
+                />
               </div>
 
               <div>
@@ -1131,20 +1109,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 />
               </div>
 
-              <div>
-                <label className="block text-[10px] tracking-[0.14em] uppercase text-[#171717]/80 font-semibold mb-1">
-                  Category Image URL
-                </label>
-                <input
-                  type="url"
-                  required
-                  value={editingCategory.imageUrl}
-                  onChange={(e) =>
-                    setEditingCategory({ ...editingCategory, imageUrl: e.target.value })
-                  }
-                  className="w-full px-3 py-2 bg-white border border-[#E8DFD3] text-xs focus:outline-none"
-                />
-              </div>
+              <ImageUploader
+                label="Category Cover Image"
+                value={editingCategory.imageUrl}
+                onChange={(url) =>
+                  setEditingCategory({ ...editingCategory, imageUrl: url })
+                }
+                folder="categories"
+                aspectRatio="4/3"
+                helperText="Landscape 4:3 ratio recommended"
+                required
+              />
 
               <div>
                 <label className="block text-[10px] tracking-[0.14em] uppercase text-[#171717]/80 font-semibold mb-1">
