@@ -18,7 +18,13 @@ import { AdminDashboard } from './components/AdminDashboard';
 import { Footer } from './components/Footer';
 import { Toast } from './components/Toast';
 
-import { testConnection } from './lib/firebase';
+import { testConnection, auth, signInWithGoogle, logOut } from './lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+
+const AUTHORIZED_ADMIN_EMAILS = [
+  'sudeep.marandi5@gmail.com',
+  'editor@yatrababa.com',
+];
 
 export default function App() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -36,7 +42,22 @@ export default function App() {
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+  const [adminUserEmail, setAdminUserEmail] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Track real Firebase Auth state changes
+  useEffect(() => {
+    if (!auth) return;
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user && user.email) {
+        if (AUTHORIZED_ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+          setIsAdminAuthenticated(true);
+          setAdminUserEmail(user.email);
+        }
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   // Initialize data on mount
   useEffect(() => {
@@ -124,6 +145,66 @@ export default function App() {
     setProducts(fresh.products);
     setCategories(fresh.categories);
     setBannerSettings(fresh.banner);
+  };
+
+  const handleGoogleLogin = async (): Promise<{ success: boolean; error?: string }> => {
+    try {
+      const result = await signInWithGoogle();
+      const user = result.user;
+      if (user && user.email && AUTHORIZED_ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+        setIsAdminAuthenticated(true);
+        setAdminUserEmail(user.email);
+        showToast(`Welcome back, ${user.displayName || user.email}`);
+        return { success: true };
+      } else {
+        await logOut();
+        setIsAdminAuthenticated(false);
+        setAdminUserEmail(null);
+        return {
+          success: false,
+          error: `Access Denied: The Google account (${user?.email || 'unknown'}) is not in the authorized administrator directory (${AUTHORIZED_ADMIN_EMAILS.join(', ')}).`,
+        };
+      }
+    } catch (err: any) {
+      console.warn('Google sign-in error:', err);
+      return {
+        success: false,
+        error: err.message || 'Google authentication was cancelled or failed.',
+      };
+    }
+  };
+
+  const handleCredentialsLogin = async (
+    email: string,
+    pass: string
+  ): Promise<{ success: boolean; error?: string }> => {
+    const normEmail = email.trim().toLowerCase();
+    const trimmedPass = pass.trim();
+
+    // Strict verified administrator credentials
+    const validAdmins: Record<string, string> = {
+      'sudeep.marandi5@gmail.com': 'Yatrababa@Editorial2026',
+      'editor@yatrababa.com': 'Yatrababa@Editorial2026',
+    };
+
+    if (validAdmins[normEmail] && validAdmins[normEmail] === trimmedPass) {
+      setIsAdminAuthenticated(true);
+      setAdminUserEmail(normEmail);
+      showToast(`Authenticated as Administrator (${normEmail})`);
+      return { success: true };
+    } else {
+      return {
+        success: false,
+        error: 'Invalid Credentials: Authentication rejected. The email or passkey entered is not recognized. Please use valid credentials or Sign In with Google.',
+      };
+    }
+  };
+
+  const handleLogout = async () => {
+    await logOut();
+    setIsAdminAuthenticated(false);
+    setAdminUserEmail(null);
+    showToast('Signed out of Editor Portal');
   };
 
   if (!bannerSettings) {
@@ -236,14 +317,10 @@ export default function App() {
         onResetData={handleResetData}
         onShowToast={showToast}
         isAdmin={isAdminAuthenticated}
-        onLogin={(email) => {
-          setIsAdminAuthenticated(true);
-          showToast(`Logged in as Editor (${email})`);
-        }}
-        onLogout={() => {
-          setIsAdminAuthenticated(false);
-          showToast('Signed out of Editor Portal');
-        }}
+        adminUserEmail={adminUserEmail}
+        onCredentialsLogin={handleCredentialsLogin}
+        onGoogleLogin={handleGoogleLogin}
+        onLogout={handleLogout}
       />
 
       <Toast message={toastMessage} onClose={() => setToastMessage(null)} />
