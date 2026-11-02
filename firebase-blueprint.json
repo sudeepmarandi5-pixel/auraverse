@@ -55,6 +55,15 @@
         "announcement": { "type": "string", "maxLength": 500 }
       },
       "required": ["headline", "subheadline", "ctaText", "imageUrl"]
+    },
+    "User": {
+      "title": "User",
+      "description": "User profile and role metadata",
+      "type": "object",
+      "properties": {
+        "admin": { "type": "string" },
+        "role": { "type": "string" }
+      }
     }
   },
   "firestore": {
@@ -69,6 +78,10 @@
     "/settings/{settingId}": {
       "schema": "BannerSettings",
       "description": "Global storefront settings such as hero banner and announcement"
+    },
+    "/user/{userEmail}": {
+      "schema": "User",
+      "description": "User and administrator profile credentials"
     }
   }
 }

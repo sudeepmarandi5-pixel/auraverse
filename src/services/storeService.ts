@@ -13,8 +13,8 @@ import {
   setDoc,
   deleteDoc,
   getDoc,
-  writeBatch,
 } from 'firebase/firestore';
+import { deleteImageFromStorage } from './storageService';
 
 const PRODUCTS_STORAGE_KEY = 'yatrababa_products_v2';
 const CATEGORIES_STORAGE_KEY = 'yatrababa_categories_v2';
@@ -101,7 +101,22 @@ export class StoreService {
     const products = await this.getProducts();
     const existingIndex = products.findIndex((p) => p.id === product.id);
 
+    // If an existing product image is being replaced, safely delete the previous image from Storage
     if (existingIndex >= 0) {
+      const oldProduct = products[existingIndex];
+      if (oldProduct.imageUrl && oldProduct.imageUrl !== product.imageUrl) {
+        deleteImageFromStorage(oldProduct.imageUrl).catch((err) =>
+          console.warn('Could not clean up replaced product image:', err)
+        );
+      }
+      if (
+        oldProduct.secondaryImageUrl &&
+        oldProduct.secondaryImageUrl !== product.secondaryImageUrl
+      ) {
+        deleteImageFromStorage(oldProduct.secondaryImageUrl).catch((err) =>
+          console.warn('Could not clean up replaced secondary product image:', err)
+        );
+      }
       products[existingIndex] = product;
     } else {
       products.unshift(product);
@@ -119,6 +134,22 @@ export class StoreService {
 
   static async deleteProduct(id: string): Promise<void> {
     const products = await this.getProducts();
+    const productToDelete = products.find((p) => p.id === id);
+
+    // Safely delete associated image(s) from Firebase Storage
+    if (productToDelete) {
+      if (productToDelete.imageUrl) {
+        deleteImageFromStorage(productToDelete.imageUrl).catch((err) =>
+          console.warn('Could not delete product primary image from Storage:', err)
+        );
+      }
+      if (productToDelete.secondaryImageUrl) {
+        deleteImageFromStorage(productToDelete.secondaryImageUrl).catch((err) =>
+          console.warn('Could not delete product secondary image from Storage:', err)
+        );
+      }
+    }
+
     const filtered = products.filter((p) => p.id !== id);
     localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(filtered));
 
@@ -175,6 +206,12 @@ export class StoreService {
     const categories = await this.getCategories();
     const idx = categories.findIndex((c) => c.id === category.id);
     if (idx >= 0) {
+      const oldCat = categories[idx];
+      if (oldCat.imageUrl && oldCat.imageUrl !== category.imageUrl) {
+        deleteImageFromStorage(oldCat.imageUrl).catch((err) =>
+          console.warn('Could not clean up replaced category image:', err)
+        );
+      }
       categories[idx] = category;
     } else {
       categories.push(category);
@@ -192,6 +229,14 @@ export class StoreService {
 
   static async deleteCategory(id: string): Promise<void> {
     const categories = await this.getCategories();
+    const catToDelete = categories.find((c) => c.id === id);
+
+    if (catToDelete && catToDelete.imageUrl) {
+      deleteImageFromStorage(catToDelete.imageUrl).catch((err) =>
+        console.warn('Could not delete category image from Storage:', err)
+      );
+    }
+
     const filtered = categories.filter((c) => c.id !== id);
     localStorage.setItem(CATEGORIES_STORAGE_KEY, JSON.stringify(filtered));
 
@@ -232,6 +277,13 @@ export class StoreService {
   }
 
   static async saveBannerSettings(settings: BannerSettings): Promise<void> {
+    const currentBanner = await this.getBannerSettings();
+    if (currentBanner.imageUrl && currentBanner.imageUrl !== settings.imageUrl) {
+      deleteImageFromStorage(currentBanner.imageUrl).catch((err) =>
+        console.warn('Could not clean up replaced banner image:', err)
+      );
+    }
+
     localStorage.setItem(BANNER_STORAGE_KEY, JSON.stringify(settings));
 
     if (isFirebaseConfigured && db) {

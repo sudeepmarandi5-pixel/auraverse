@@ -245,9 +245,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <p className="text-xs font-sans tracking-[0.12em] uppercase text-[#171717]/60 mt-1">
                   Protected Editorial & Catalog Console
                 </p>
-                <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#F5F0E8] border border-[#D8C3A5] text-[10px] uppercase font-sans tracking-widest text-[#171717]">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                  <span>Cloud Firestore Online</span>
+                <div className="mt-3 flex items-center justify-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#F5F0E8] border border-[#D8C3A5] text-[10px] uppercase font-sans tracking-widest text-[#171717]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    <span>Firebase Auth & Storage Online</span>
+                  </span>
                 </div>
               </div>
 
@@ -276,7 +278,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       setAuthError(res.error || 'Google login failed.');
                     }
                   }}
-                  className="w-full py-3 px-4 bg-white hover:bg-[#F5F0E8] text-[#171717] border border-[#171717] text-xs font-sans tracking-[0.16em] uppercase font-semibold transition-all duration-150 flex items-center justify-center gap-3 cursor-pointer shadow-xs disabled:opacity-50"
+                  className="w-full py-3 px-4 bg-[#171717] hover:bg-[#D8C3A5] text-white hover:text-[#171717] text-xs font-sans tracking-[0.16em] uppercase font-semibold transition-all duration-150 flex items-center justify-center gap-3 cursor-pointer shadow-xs disabled:opacity-50"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
                     <path
@@ -296,14 +298,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                     />
                   </svg>
-                  <span>{isAuthenticating ? 'Authenticating...' : 'Sign In with Google'}</span>
+                  <span>{isAuthenticating ? 'Authenticating with Google...' : 'Sign In with Google'}</span>
                 </button>
 
                 {/* Divider */}
                 <div className="relative flex items-center justify-center my-4">
                   <div className="border-t border-[#E8DFD3] w-full" />
                   <span className="bg-white px-3 text-[10px] uppercase font-sans tracking-[0.16em] text-[#171717]/50 whitespace-nowrap">
-                    or authenticate with passkey
+                    or Firebase email credentials
                   </span>
                   <div className="border-t border-[#E8DFD3] w-full" />
                 </div>
@@ -324,7 +326,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 >
                   <div>
                     <label className="block text-[11px] font-sans tracking-[0.14em] uppercase text-[#171717] font-medium mb-1">
-                      Admin Email
+                      Firebase Admin Email
                     </label>
                     <input
                       type="email"
@@ -338,49 +340,37 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                   <div>
                     <label className="block text-[11px] font-sans tracking-[0.14em] uppercase text-[#171717] font-medium mb-1">
-                      Security Passkey
+                      Password
                     </label>
                     <input
                       type="password"
                       required
-                      placeholder="Enter administrator passkey"
+                      placeholder="Enter Firebase account password"
                       value={loginPassword}
                       onChange={(e) => setLoginPassword(e.target.value)}
                       className="w-full px-3 py-2.5 bg-white border border-[#E8DFD3] text-sm text-[#171717] focus:outline-none focus:border-[#171717]"
                     />
                   </div>
 
-                  <div className="pt-2">
+                  <div className="pt-1">
                     <button
                       type="submit"
                       disabled={isAuthenticating}
-                      className="w-full py-3 bg-[#171717] text-white hover:bg-[#D8C3A5] hover:text-[#171717] text-xs font-sans tracking-[0.18em] uppercase font-semibold transition-colors cursor-pointer disabled:opacity-50"
+                      className="w-full py-2.5 bg-white border border-[#171717] text-[#171717] hover:bg-[#F5F0E8] text-xs font-sans tracking-[0.18em] uppercase font-semibold transition-colors cursor-pointer disabled:opacity-50"
                     >
-                      {isAuthenticating ? 'Verifying...' : 'Verify Passkey & Enter'}
+                      {isAuthenticating ? 'Signing In...' : 'Sign In with Email'}
                     </button>
                   </div>
 
-                  {/* Quick-fill helper for developer testing */}
-                  <div className="p-3 bg-[#F5F0E8] border border-[#E8DFD3] text-[11px] font-sans text-[#171717]/70 space-y-1.5">
-                    <div className="flex items-center justify-between font-medium text-[#171717] text-[10px] uppercase tracking-wider">
-                      <span>Authorized Admin Account</span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setLoginEmail('sudeep.marandi5@gmail.com');
-                          setLoginPassword('Yatrababa@Editorial2026');
-                          setAuthError(null);
-                        }}
-                        className="text-[#171717] underline decoration-[#D8C3A5] hover:opacity-75 font-semibold cursor-pointer"
-                      >
-                        Auto-Fill Credentials
-                      </button>
+                  <div className="p-3 bg-[#F5F0E8] border border-[#E8DFD3] text-[10px] font-sans text-[#171717]/70 space-y-1">
+                    <div className="font-medium text-[#171717] uppercase tracking-wider">
+                      Authorized Admin Account
                     </div>
-                    <div className="text-[10px] text-[#171717]/60">
-                      Email: <code className="text-[#171717]">sudeep.marandi5@gmail.com</code>
+                    <div>
+                      Primary Administrator: <code className="text-[#171717] font-semibold">sudeep.marandi5@gmail.com</code>
                     </div>
-                    <div className="text-[10px] text-[#171717]/60">
-                      Passkey: <code className="text-[#171717]">Yatrababa@Editorial2026</code>
+                    <div className="text-[9px] text-[#171717]/60">
+                      Sign in with the authorized Google or Firebase account to manage garments and images.
                     </div>
                   </div>
                 </form>

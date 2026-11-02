@@ -18,13 +18,16 @@ import { AdminDashboard } from './components/AdminDashboard';
 import { Footer } from './components/Footer';
 import { Toast } from './components/Toast';
 
-import { testConnection, auth, signInWithGoogle, logOut } from './lib/firebase';
+import {
+  testConnection,
+  auth,
+  signInWithGoogle,
+  signInWithEmail,
+  logOut,
+  verifyUserIsAdmin,
+  AUTHORIZED_ADMIN_EMAILS,
+} from './lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-
-const AUTHORIZED_ADMIN_EMAILS = [
-  'sudeep.marandi5@gmail.com',
-  'editor@yatrababa.com',
-];
 
 export default function App() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -48,12 +51,19 @@ export default function App() {
   // Track real Firebase Auth state changes
   useEffect(() => {
     if (!auth) return;
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user && user.email) {
-        if (AUTHORIZED_ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+        const isAdmin = await verifyUserIsAdmin(user);
+        if (isAdmin) {
           setIsAdminAuthenticated(true);
           setAdminUserEmail(user.email);
+        } else {
+          setIsAdminAuthenticated(false);
+          setAdminUserEmail(null);
         }
+      } else {
+        setIsAdminAuthenticated(false);
+        setAdminUserEmail(null);
       }
     });
     return () => unsubscribe();
@@ -151,7 +161,8 @@ export default function App() {
     try {
       const result = await signInWithGoogle();
       const user = result.user;
-      if (user && user.email && AUTHORIZED_ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+      const isAdmin = await verifyUserIsAdmin(user);
+      if (user && isAdmin) {
         setIsAdminAuthenticated(true);
         setAdminUserEmail(user.email);
         showToast(`Welcome back, ${user.displayName || user.email}`);
@@ -162,7 +173,7 @@ export default function App() {
         setAdminUserEmail(null);
         return {
           success: false,
-          error: `Access Denied: The Google account (${user?.email || 'unknown'}) is not in the authorized administrator directory (${AUTHORIZED_ADMIN_EMAILS.join(', ')}).`,
+          error: `Access Denied: The Firebase account (${user?.email || 'unknown'}) is not registered as an authorized administrator (${AUTHORIZED_ADMIN_EMAILS.join(', ')}).`,
         };
       }
     } catch (err: any) {
@@ -178,24 +189,36 @@ export default function App() {
     email: string,
     pass: string
   ): Promise<{ success: boolean; error?: string }> => {
-    const normEmail = email.trim().toLowerCase();
-    const trimmedPass = pass.trim();
+    try {
+      const userCredential = await signInWithEmail(email, pass);
+      const user = userCredential.user;
+      const isAdmin = await verifyUserIsAdmin(user);
 
-    // Strict verified administrator credentials
-    const validAdmins: Record<string, string> = {
-      'sudeep.marandi5@gmail.com': 'Yatrababa@Editorial2026',
-      'editor@yatrababa.com': 'Yatrababa@Editorial2026',
-    };
-
-    if (validAdmins[normEmail] && validAdmins[normEmail] === trimmedPass) {
-      setIsAdminAuthenticated(true);
-      setAdminUserEmail(normEmail);
-      showToast(`Authenticated as Administrator (${normEmail})`);
-      return { success: true };
-    } else {
+      if (user && isAdmin) {
+        setIsAdminAuthenticated(true);
+        setAdminUserEmail(user.email);
+        showToast(`Authenticated as Administrator (${user.email})`);
+        return { success: true };
+      } else {
+        await logOut();
+        setIsAdminAuthenticated(false);
+        setAdminUserEmail(null);
+        return {
+          success: false,
+          error: `Access Denied: Account (${user?.email}) is not authorized for administrator operations.`,
+        };
+      }
+    } catch (err: any) {
+      const code = err?.code || '';
+      let message = err?.message || 'Authentication failed.';
+      if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
+        message = 'Invalid email or password. Please verify your credentials or use Sign In with Google.';
+      } else if (code === 'auth/too-many-requests') {
+        message = 'Access temporarily locked due to many failed attempts. Try again later or reset password.';
+      }
       return {
         success: false,
-        error: 'Invalid Credentials: Authentication rejected. The email or passkey entered is not recognized. Please use valid credentials or Sign In with Google.',
+        error: message,
       };
     }
   };

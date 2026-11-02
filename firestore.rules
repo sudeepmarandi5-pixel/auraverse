@@ -10,7 +10,7 @@ service cloud.firestore {
 
     // Helper functions
     function isValidId(id) {
-      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-\\.\\@]+$');
     }
 
     function isSignedIn() {
@@ -21,7 +21,11 @@ service cloud.firestore {
       return isSignedIn() && (
         request.auth.token.email == 'sudeep.marandi5@gmail.com' ||
         request.auth.token.email == 'editor@yatrababa.com' ||
-        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        (
+          exists(/databases/$(database)/documents/user/$(request.auth.token.email)) &&
+          get(/databases/$(database)/documents/user/$(request.auth.token.email)).data.admin != null
+        )
       );
     }
 
@@ -72,6 +76,12 @@ service cloud.firestore {
       allow read: if true;
       allow create, update: if isEditorOrAdmin() && isValidId(settingId) && isValidBannerSettings(request.resource.data);
       allow delete: if isEditorOrAdmin() && isValidId(settingId);
+    }
+
+    // User collection: users can read their own document or admin can read
+    match /user/{userEmail} {
+      allow read: if isSignedIn() && (request.auth.token.email == userEmail || isEditorOrAdmin());
+      allow write: if isEditorOrAdmin();
     }
 
     // Admins registry: only existing admin can read or write

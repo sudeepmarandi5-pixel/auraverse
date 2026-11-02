@@ -1,0 +1,61 @@
+rules_version = '2';
+
+// Firebase Cloud Storage Security Rules for Yatrababa.com
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Global default: deny everything
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Checks if the authenticated user has verified administrator access
+    function isAuthorizedAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'sudeep.marandi5@gmail.com' ||
+        request.auth.token.email == 'editor@yatrababa.com' ||
+        (request.auth.token.keys().hasAll(['admin']) && request.auth.token.admin == true) ||
+        (request.auth.token.keys().hasAll(['role']) && request.auth.token.role == 'admin')
+      );
+    }
+
+    // Validates image MIME type and imposes a strict 10MB file size boundary
+    function isValidImage() {
+      return request.resource.contentType.matches('image/(jpeg|png|webp|avif|gif|svg\\+xml)')
+        && request.resource.size > 0
+        && request.resource.size <= 10 * 1024 * 1024; // 10MB limit
+    }
+
+    // Product gallery assets
+    // Public read: allow shoppers to view editorial garment photography
+    // Write / Update: strictly authorized administrators with validated image file
+    // Delete: strictly authorized administrators
+    match /products/{imageId} {
+      allow read: if true;
+      allow create: if isAuthorizedAdmin() && isValidImage();
+      allow update: if isAuthorizedAdmin() && isValidImage();
+      allow delete: if isAuthorizedAdmin();
+    }
+
+    // Category banner and thumbnail assets
+    match /categories/{imageId} {
+      allow read: if true;
+      allow create: if isAuthorizedAdmin() && isValidImage();
+      allow update: if isAuthorizedAdmin() && isValidImage();
+      allow delete: if isAuthorizedAdmin();
+    }
+
+    // Homepage hero editorial visual assets
+    match /banner/{imageId} {
+      allow read: if true;
+      allow create: if isAuthorizedAdmin() && isValidImage();
+      allow update: if isAuthorizedAdmin() && isValidImage();
+      allow delete: if isAuthorizedAdmin();
+    }
+  }
+}

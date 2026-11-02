@@ -4,9 +4,17 @@
  */
 
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
-import { getFirestore, doc, getDocFromServer, type Firestore } from 'firebase/firestore';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, type Auth } from 'firebase/auth';
-import { getStorage, type FirebaseStorage } from 'firebase/storage';
+import { getFirestore, doc, getDoc, getDocFromServer, type Firestore } from 'firebase/firestore';
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  signOut,
+  type Auth,
+  type User,
+} from 'firebase/auth';
+import { getStorage, type FirebaseStorage } from '@firebase/storage';
 import firebaseConfig from '@/firebase-applet-config.json';
 
 export enum OperationType {
@@ -40,21 +48,80 @@ let db: Firestore;
 let auth: Auth;
 let storage: FirebaseStorage;
 
+// Determine storage bucket from config or env
+const configuredBucket =
+  (import.meta.env.VITE_FIREBASE_STORAGE_BUCKET as string | undefined) ||
+  firebaseConfig.storageBucket ||
+  (firebaseConfig.projectId ? `${firebaseConfig.projectId}.firebasestorage.app` : undefined);
+
 try {
   app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-  // CRITICAL: Must use firestoreDatabaseId
   db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
   auth = getAuth(app);
-  storage = getStorage(app);
+  storage = getStorage(
+    app,
+    configuredBucket ? `gs://${configuredBucket.replace(/^gs:\/\//, '')}` : undefined
+  );
 } catch (e) {
   console.error('Firebase initialization error:', e);
   app = initializeApp(firebaseConfig);
   db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
   auth = getAuth(app);
-  storage = getStorage(app);
+  storage = getStorage(
+    app,
+    configuredBucket ? `gs://${configuredBucket.replace(/^gs:\/\//, '')}` : undefined
+  );
 }
 
 export const isFirebaseConfigured = Boolean(firebaseConfig.projectId && firebaseConfig.apiKey);
+
+// Authorized admin emails list for editorial control
+export const AUTHORIZED_ADMIN_EMAILS = [
+  'sudeep.marandi5@gmail.com',
+  'editor@yatrababa.com',
+];
+
+/**
+ * Checks if a given Firebase user is authorized as an administrator.
+ * Validates against both hard-enforced email allowlist and Firestore user/admin records.
+ */
+export async function verifyUserIsAdmin(user: User | null): Promise<boolean> {
+  if (!user || !user.email) return false;
+
+  const normalizedEmail = user.email.toLowerCase().trim();
+
+  // 1. Direct authorized email check
+  if (AUTHORIZED_ADMIN_EMAILS.includes(normalizedEmail)) {
+    return true;
+  }
+
+  // 2. Check Firestore 'user' collection (e.g. user/{email} -> admin: "sudeep")
+  try {
+    const userDocRef = doc(db, 'user', normalizedEmail);
+    const userSnap = await getDoc(userDocRef);
+    if (userSnap.exists()) {
+      const data = userSnap.data();
+      if (data && (data.admin || data.role === 'admin')) {
+        return true;
+      }
+    }
+  } catch (err) {
+    // Graceful fallback
+  }
+
+  // 3. Check Firestore 'admins' collection by UID
+  try {
+    const adminDocRef = doc(db, 'admins', user.uid);
+    const adminSnap = await getDoc(adminDocRef);
+    if (adminSnap.exists()) {
+      return true;
+    }
+  } catch (err) {
+    // Graceful fallback
+  }
+
+  return false;
+}
 
 export function handleFirestoreError(
   error: unknown,
@@ -96,10 +163,14 @@ export async function testConnection(): Promise<boolean> {
   }
 }
 
-// Google Auth helper
+// Real Firebase Auth Helpers (no demo bypasses)
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
   return signInWithPopup(auth, provider);
+}
+
+export async function signInWithEmail(email: string, pass: string) {
+  return signInWithEmailAndPassword(auth, email.trim(), pass);
 }
 
 export async function logOut() {
