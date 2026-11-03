@@ -5,7 +5,7 @@
 
 import { Product, Category, BannerSettings } from '../types';
 import { INITIAL_PRODUCTS, INITIAL_CATEGORIES, INITIAL_BANNER_SETTINGS } from '../data/initialData';
-import { db, isFirebaseConfigured, handleFirestoreError, OperationType } from '../lib/firebase';
+import { db, auth, isFirebaseConfigured, handleFirestoreError, OperationType } from '../lib/firebase';
 import {
   collection,
   doc,
@@ -24,7 +24,7 @@ const WISHLIST_STORAGE_KEY = 'yatrababa_wishlist_v2';
 export class StoreService {
   // --- Seed initial data to Firestore ---
   static async seedFirestore(): Promise<void> {
-    if (!isFirebaseConfigured || !db) return;
+    if (!isFirebaseConfigured || !db || !auth?.currentUser) return;
 
     try {
       // Seed products
@@ -58,16 +58,22 @@ export class StoreService {
           if (existingSaree) {
             existingSaree.imageUrl = saree.imageUrl;
             existingSaree.secondaryImageUrl = saree.secondaryImageUrl;
-            setDoc(doc(db, 'products', saree.id), existingSaree, { merge: true }).catch(() => {});
+            if (auth?.currentUser) {
+              setDoc(doc(db, 'products', saree.id), existingSaree, { merge: true }).catch(() => {});
+            }
           } else {
             prods.unshift(saree);
-            setDoc(doc(db, 'products', saree.id), saree, { merge: true }).catch(() => {});
+            if (auth?.currentUser) {
+              setDoc(doc(db, 'products', saree.id), saree, { merge: true }).catch(() => {});
+            }
           }
           localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(prods));
           return prods;
         } else {
-          // Auto-seed if newly provisioned database is empty
-          await this.seedFirestore();
+          // Auto-seed only if current user is logged in
+          if (auth?.currentUser) {
+            await this.seedFirestore();
+          }
           return INITIAL_PRODUCTS;
         }
       } catch (err) {
@@ -262,12 +268,16 @@ export class StoreService {
             data.headline = "Women's Fashion Curation";
             data.subheadline = 'Discover the latest collection of dresses, sarees, ethnic couture, and contemporary western wear curated with premium elegance.';
             data.ctaText = 'Shop the Collection';
-            setDoc(doc(db, 'settings', 'banner'), data, { merge: true }).catch(() => {});
+            if (auth?.currentUser) {
+              setDoc(doc(db, 'settings', 'banner'), data, { merge: true }).catch(() => {});
+            }
           }
           localStorage.setItem(BANNER_STORAGE_KEY, JSON.stringify(data));
           return data;
         } else {
-          await setDoc(doc(db, 'settings', 'banner'), INITIAL_BANNER_SETTINGS, { merge: true });
+          if (auth?.currentUser) {
+            setDoc(doc(db, 'settings', 'banner'), INITIAL_BANNER_SETTINGS, { merge: true }).catch(() => {});
+          }
           localStorage.setItem(BANNER_STORAGE_KEY, JSON.stringify(INITIAL_BANNER_SETTINGS));
           return INITIAL_BANNER_SETTINGS;
         }

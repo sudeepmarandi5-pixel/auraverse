@@ -182,23 +182,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200"
     >
       <div className="fixed inset-0" onClick={onClose} />
 
-      <div className="relative bg-[#121212] w-full max-w-6xl h-[92vh] border border-[#262626] shadow-2xl z-10 flex flex-col overflow-hidden">
+      <div className="relative bg-[#FFFFFF] w-full max-w-6xl h-[92vh] border border-[#E8E2D9] shadow-2xl z-10 flex flex-col overflow-hidden">
         
         {/* Top Bar */}
-        <div className="px-6 py-4 bg-[#0D0D0D] border-b border-[#222222] flex items-center justify-between">
+        <div className="px-6 py-4 bg-[#FAF8F5] border-b border-[#E8E2D9] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-sm bg-[#D8C3A5] text-[#0A0A0A] flex items-center justify-center font-serif text-lg font-bold">
+            <div className="w-8 h-8 rounded-sm bg-[#1A1A1A] text-[#FFFFFF] flex items-center justify-center font-serif text-lg font-bold">
               Y
             </div>
             <div>
-              <h2 className="font-serif text-xl sm:text-2xl text-[#FFFFFF] font-normal leading-tight">
+              <h2 className="font-serif text-xl sm:text-2xl text-[#1A1A1A] font-normal leading-tight">
                 Yatrababa Admin Portal
               </h2>
-              <span className="text-[10px] font-sans tracking-[0.2em] uppercase text-[#8E8E8E] block">
+              <span className="text-[10px] font-sans tracking-[0.2em] uppercase text-[#7A7570] block">
                 Editorial Control & Catalog Management
               </span>
             </div>
@@ -208,13 +208,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             {isAdmin && (
               <>
                 {adminUserEmail && (
-                  <span className="hidden sm:inline-block text-[11px] font-sans tracking-[0.14em] uppercase text-[#D8C3A5] bg-[#1A1A1A] border border-[#2E2E2E] px-2.5 py-1">
+                  <span className="hidden sm:inline-block text-[11px] font-sans tracking-[0.14em] uppercase text-[#1A1A1A] bg-[#FFFFFF] border border-[#E8E2D9] px-2.5 py-1">
                     {adminUserEmail}
                   </span>
                 )}
                 <button
                   onClick={onLogout}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-sans tracking-[0.14em] uppercase text-[#EDEDED] hover:text-[#D8C3A5] border border-[#2E2E2E] hover:border-[#D8C3A5] transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-sans tracking-[0.14em] uppercase text-[#1A1A1A] hover:text-[#8C7355] border border-[#E8E2D9] hover:border-[#1A1A1A] transition-colors cursor-pointer"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   <span>Sign Out</span>
@@ -223,7 +223,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             )}
             <button
               onClick={onClose}
-              className="p-2 text-[#EDEDED] hover:bg-[#1A1A1A] hover:text-[#D8C3A5] rounded-full transition-colors cursor-pointer"
+              className="p-2 text-[#1A1A1A] hover:bg-[#F0EAE1] hover:text-[#8C7355] rounded-full transition-colors cursor-pointer"
               aria-label="Close admin dashboard"
             >
               <X className="w-5 h-5" />
@@ -233,21 +233,21 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
         {/* If Not Authenticated: Secure Login Screen */}
         {!isAdmin ? (
-          <div className="flex-grow flex items-center justify-center p-6 bg-[#0A0A0A] overflow-y-auto">
-            <div className="bg-[#141414] border border-[#262626] p-8 max-w-md w-full shadow-2xl my-auto">
+          <div className="flex-grow flex items-center justify-center p-6 bg-[#FAF8F5] overflow-y-auto">
+            <div className="bg-[#FFFFFF] border border-[#E8E2D9] p-8 max-w-md w-full shadow-lg my-auto">
               <div className="text-center mb-6">
-                <div className="w-12 h-12 rounded-full border border-[#D8C3A5] bg-[#1C1C1C] flex items-center justify-center mx-auto mb-3">
-                  <Lock className="w-5 h-5 text-[#D8C3A5]" />
+                <div className="w-12 h-12 rounded-full border border-[#C5A880] bg-[#FAF8F5] flex items-center justify-center mx-auto mb-3">
+                  <Lock className="w-5 h-5 text-[#8C7355]" />
                 </div>
-                <h3 className="font-serif text-2xl text-[#FFFFFF] font-normal">
+                <h3 className="font-serif text-2xl text-[#1A1A1A] font-normal">
                   Administrator Sign In
                 </h3>
-                <p className="text-xs font-sans tracking-[0.12em] uppercase text-[#8E8E8E] mt-1">
+                <p className="text-xs font-sans tracking-[0.12em] uppercase text-[#7A7570] mt-1">
                   Protected Editorial & Catalog Console
                 </p>
                 <div className="mt-3 flex items-center justify-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#1A1A1A] border border-[#2E2E2E] text-[10px] uppercase font-sans tracking-widest text-[#D8C3A5]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#FAF8F5] border border-[#E8E2D9] text-[10px] uppercase font-sans tracking-widest text-[#8C7355]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
                     <span>Firebase Auth & Storage Online</span>
                   </span>
                 </div>
@@ -255,8 +255,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
               {/* Error Notice */}
               {authError && (
-                <div className="mb-5 p-3.5 bg-red-950/60 border border-red-800 text-red-200 text-xs font-sans flex items-start gap-2.5 animate-in fade-in">
-                  <AlertCircle className="w-4 h-4 shrink-0 text-red-400 mt-0.5" />
+                <div className="mb-5 p-3.5 bg-red-50 border border-red-200 text-red-800 text-xs font-sans flex items-start gap-2.5 animate-in fade-in">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-red-600 mt-0.5" />
                   <div className="leading-relaxed">
                     <span className="font-semibold block mb-0.5">Authentication Failed</span>
                     <span>{authError}</span>
@@ -278,7 +278,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       setAuthError(res.error || 'Google login failed.');
                     }
                   }}
-                  className="w-full py-3 px-4 bg-[#FFFFFF] hover:bg-[#D8C3A5] text-[#0A0A0A] text-xs font-sans tracking-[0.16em] uppercase font-semibold transition-all duration-150 flex items-center justify-center gap-3 cursor-pointer shadow-lg shadow-black/50 disabled:opacity-50"
+                  className="w-full py-3 px-4 bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1A1A1A] border border-[#E8E2D9] text-xs font-sans tracking-[0.16em] uppercase font-semibold transition-all duration-150 flex items-center justify-center gap-3 cursor-pointer shadow-xs disabled:opacity-50"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
                     <path
@@ -303,11 +303,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                 {/* Divider */}
                 <div className="relative flex items-center justify-center my-4">
-                  <div className="border-t border-[#262626] w-full" />
-                  <span className="bg-[#141414] px-3 text-[10px] uppercase font-sans tracking-[0.16em] text-[#777777] whitespace-nowrap">
+                  <div className="border-t border-[#E8E2D9] w-full" />
+                  <span className="bg-[#FFFFFF] px-3 text-[10px] uppercase font-sans tracking-[0.16em] text-[#7A7570] whitespace-nowrap">
                     or Firebase email credentials
                   </span>
-                  <div className="border-t border-[#262626] w-full" />
+                  <div className="border-t border-[#E8E2D9] w-full" />
                 </div>
 
                 {/* Credentials Form */}
@@ -325,7 +325,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   className="space-y-4"
                 >
                   <div>
-                    <label className="block text-[11px] font-sans tracking-[0.14em] uppercase text-[#EDEDED] font-medium mb-1">
+                    <label className="block text-[11px] font-sans tracking-[0.14em] uppercase text-[#1A1A1A] font-medium mb-1">
                       Firebase Admin Email
                     </label>
                     <input
@@ -334,12 +334,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       placeholder="e.g. sudeep.marandi5@gmail.com"
                       value={loginEmail}
                       onChange={(e) => setLoginEmail(e.target.value)}
-                      className="w-full px-3 py-2.5 bg-[#1C1C1C] border border-[#2E2E2E] text-sm text-[#FFFFFF] placeholder-[#666666] focus:outline-none focus:border-[#D8C3A5]"
+                      className="w-full px-3 py-2.5 bg-[#FFFFFF] border border-[#E8E2D9] text-sm text-[#1A1A1A] placeholder-[#888888] focus:outline-none focus:border-[#1A1A1A]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-sans tracking-[0.14em] uppercase text-[#EDEDED] font-medium mb-1">
+                    <label className="block text-[11px] font-sans tracking-[0.14em] uppercase text-[#1A1A1A] font-medium mb-1">
                       Password
                     </label>
                     <input
@@ -348,7 +348,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       placeholder="Enter Firebase account password"
                       value={loginPassword}
                       onChange={(e) => setLoginPassword(e.target.value)}
-                      className="w-full px-3 py-2.5 bg-[#1C1C1C] border border-[#2E2E2E] text-sm text-[#FFFFFF] placeholder-[#666666] focus:outline-none focus:border-[#D8C3A5]"
+                      className="w-full px-3 py-2.5 bg-[#FFFFFF] border border-[#E8E2D9] text-sm text-[#1A1A1A] placeholder-[#888888] focus:outline-none focus:border-[#1A1A1A]"
                     />
                   </div>
 
@@ -356,20 +356,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <button
                       type="submit"
                       disabled={isAuthenticating}
-                      className="w-full py-2.5 bg-[#1A1A1A] border border-[#2E2E2E] text-[#FFFFFF] hover:border-[#D8C3A5] hover:text-[#D8C3A5] text-xs font-sans tracking-[0.18em] uppercase font-semibold transition-colors cursor-pointer disabled:opacity-50"
+                      className="w-full py-2.5 bg-[#1A1A1A] text-[#FFFFFF] hover:bg-[#333333] text-xs font-sans tracking-[0.18em] uppercase font-semibold transition-colors cursor-pointer disabled:opacity-50"
                     >
                       {isAuthenticating ? 'Signing In...' : 'Sign In with Email'}
                     </button>
                   </div>
 
-                  <div className="p-3 bg-[#181818] border border-[#262626] text-[10px] font-sans text-[#A3A3A3] space-y-1">
-                    <div className="font-medium text-[#FFFFFF] uppercase tracking-wider">
+                  <div className="p-3 bg-[#FAF8F5] border border-[#E8E2D9] text-[10px] font-sans text-[#666666] space-y-1">
+                    <div className="font-medium text-[#1A1A1A] uppercase tracking-wider">
                       Authorized Admin Account
                     </div>
                     <div>
-                      Primary Administrator: <code className="text-[#D8C3A5] font-semibold">sudeep.marandi5@gmail.com</code>
+                      Primary Administrator: <code className="text-[#8C7355] font-semibold">sudeep.marandi5@gmail.com</code>
                     </div>
-                    <div className="text-[9px] text-[#777777]">
+                    <div className="text-[9px] text-[#7A7570]">
                       Sign in with the authorized Google or Firebase account to manage garments and images.
                     </div>
                   </div>
@@ -382,17 +382,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <div className="flex-grow flex flex-col md:flex-row overflow-hidden">
             
             {/* Sidebar Navigation */}
-            <aside className="w-full md:w-64 bg-[#0F0F0F] border-b md:border-b-0 md:border-r border-[#222222] p-4 flex md:flex-col justify-between shrink-0">
+            <aside className="w-full md:w-64 bg-[#FAF8F5] border-b md:border-b-0 md:border-r border-[#E8E2D9] p-4 flex md:flex-col justify-between shrink-0">
               <div className="space-y-1 w-full flex md:flex-col gap-1 md:gap-1 overflow-x-auto">
                 <button
                   onClick={() => setActiveTab('products')}
                   className={`w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-sans tracking-[0.14em] uppercase font-medium rounded-xs transition-colors whitespace-nowrap cursor-pointer ${
                     activeTab === 'products'
-                      ? 'bg-[#1C1C1C] text-[#FFFFFF] border border-[#D8C3A5]/60 shadow-md font-semibold'
-                      : 'text-[#8E8E8E] hover:bg-[#161616] hover:text-[#EDEDED]'
+                      ? 'bg-[#FFFFFF] text-[#1A1A1A] border border-[#1A1A1A] shadow-xs font-semibold'
+                      : 'text-[#666666] hover:bg-[#F0EAE1] hover:text-[#1A1A1A]'
                   }`}
                 >
-                  <ShoppingBag className="w-4 h-4 text-[#D8C3A5]" />
+                  <ShoppingBag className="w-4 h-4 text-[#8C7355]" />
                   <span>Products ({products.length})</span>
                 </button>
 
@@ -400,11 +400,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   onClick={() => setActiveTab('categories')}
                   className={`w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-sans tracking-[0.14em] uppercase font-medium rounded-xs transition-colors whitespace-nowrap cursor-pointer ${
                     activeTab === 'categories'
-                      ? 'bg-[#1C1C1C] text-[#FFFFFF] border border-[#D8C3A5]/60 shadow-md font-semibold'
-                      : 'text-[#8E8E8E] hover:bg-[#161616] hover:text-[#EDEDED]'
+                      ? 'bg-[#FFFFFF] text-[#1A1A1A] border border-[#1A1A1A] shadow-xs font-semibold'
+                      : 'text-[#666666] hover:bg-[#F0EAE1] hover:text-[#1A1A1A]'
                   }`}
                 >
-                  <Layers className="w-4 h-4 text-[#D8C3A5]" />
+                  <Layers className="w-4 h-4 text-[#8C7355]" />
                   <span>Categories ({categories.length})</span>
                 </button>
 
@@ -412,19 +412,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   onClick={() => setActiveTab('banner')}
                   className={`w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-sans tracking-[0.14em] uppercase font-medium rounded-xs transition-colors whitespace-nowrap cursor-pointer ${
                     activeTab === 'banner'
-                      ? 'bg-[#1C1C1C] text-[#FFFFFF] border border-[#D8C3A5]/60 shadow-md font-semibold'
-                      : 'text-[#8E8E8E] hover:bg-[#161616] hover:text-[#EDEDED]'
+                      ? 'bg-[#FFFFFF] text-[#1A1A1A] border border-[#1A1A1A] shadow-xs font-semibold'
+                      : 'text-[#666666] hover:bg-[#F0EAE1] hover:text-[#1A1A1A]'
                   }`}
                 >
-                  <ImageIcon className="w-4 h-4 text-[#D8C3A5]" />
+                  <ImageIcon className="w-4 h-4 text-[#8C7355]" />
                   <span>Hero & Banner</span>
                 </button>
               </div>
 
               {/* Bottom Quick Tools in Sidebar */}
-              <div className="hidden md:block pt-4 border-t border-[#222222] space-y-2">
-                <div className="p-3 bg-[#161616] border border-[#262626] text-[11px] font-sans text-[#8E8E8E]">
-                  <div className="font-semibold text-[#FFFFFF] mb-1">Catalog Status</div>
+              <div className="hidden md:block pt-4 border-t border-[#E8E2D9] space-y-2">
+                <div className="p-3 bg-[#FFFFFF] border border-[#E8E2D9] text-[11px] font-sans text-[#7A7570] shadow-xs">
+                  <div className="font-semibold text-[#1A1A1A] mb-1">Catalog Status</div>
                   <div>Published: {products.filter((p) => p.status === 'published').length}</div>
                   <div>Drafts: {products.filter((p) => p.status === 'draft').length}</div>
                 </div>
@@ -436,16 +436,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       onShowToast('Catalog reset to curated editorial defaults');
                     }
                   }}
-                  className="w-full flex items-center justify-center gap-2 px-3 py-2 text-[10px] font-sans tracking-[0.12em] uppercase text-[#8E8E8E] hover:text-[#FFFFFF] border border-[#262626] bg-[#141414] hover:bg-[#1A1A1A] transition-colors cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 px-3 py-2 text-[10px] font-sans tracking-[0.12em] uppercase text-[#666666] hover:text-[#1A1A1A] border border-[#E8E2D9] bg-[#FFFFFF] hover:bg-[#FAF8F5] transition-colors cursor-pointer shadow-xs"
                 >
-                  <RotateCcw className="w-3 h-3 text-[#D8C3A5]" />
+                  <RotateCcw className="w-3 h-3 text-[#8C7355]" />
                   <span>Reset Default Edit</span>
                 </button>
               </div>
             </aside>
 
             {/* Main Content Area */}
-            <main className="flex-grow p-4 sm:p-6 lg:p-8 bg-[#121212] overflow-y-auto">
+            <main className="flex-grow p-4 sm:p-6 lg:p-8 bg-[#FFFFFF] overflow-y-auto">
               
               {/* TAB 1: PRODUCTS */}
               {activeTab === 'products' && (

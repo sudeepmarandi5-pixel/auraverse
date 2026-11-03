@@ -32,17 +32,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group bg-[#121212] border border-[#222222] hover:border-[#D8C3A5]/60 transition-all duration-300 flex flex-col relative hover:shadow-xl hover:shadow-black/70"
+      className="group bg-[#FFFFFF] border border-[#E8E2D9] hover:border-[#C5A880] transition-all duration-300 flex flex-col relative shadow-xs hover:shadow-md"
     >
       {/* Visual Container (3:4 ratio standard for high-fashion editorial) */}
-      <div className="relative aspect-[3/4] w-full bg-[#181818] overflow-hidden">
+      <div className="relative aspect-[3/4] w-full bg-[#FAF8F5] overflow-hidden">
         {imgError && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-[#181818] text-center z-1">
-            <Sparkles className="w-6 h-6 text-[#D8C3A5] mb-2" />
-            <span className="font-serif text-sm text-[#FFFFFF] line-clamp-1">
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-[#FAF8F5] text-center z-1">
+            <Sparkles className="w-6 h-6 text-[#8C7355] mb-2" />
+            <span className="font-serif text-sm text-[#1A1A1A] line-clamp-1">
               {product.title}
             </span>
-            <span className="text-[10px] uppercase font-sans tracking-widest text-[#8E8E8E] mt-1">
+            <span className="text-[10px] uppercase font-sans tracking-widest text-[#7A7570] mt-1">
               {product.brand}
             </span>
           </div>
@@ -62,36 +62,36 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             e.stopPropagation();
             onToggleWishlist(product.id);
           }}
-          className="absolute top-3 right-3 p-2 rounded-full bg-[#0A0A0A]/85 backdrop-blur-sm border border-[#2E2E2E] text-[#EDEDED] hover:bg-[#1A1A1A] hover:text-[#D8C3A5] transition-colors z-10 cursor-pointer shadow-xs"
+          className="absolute top-3 right-3 p-2 rounded-full bg-white/85 backdrop-blur-sm border border-[#E8E2D9] text-[#1A1A1A] hover:bg-white hover:text-[#8C7355] transition-colors z-10 cursor-pointer shadow-xs"
           title={isWishlisted ? 'Remove from saved' : 'Save piece'}
           aria-label={isWishlisted ? 'Remove from saved' : 'Save piece'}
         >
           <Heart
             className={`w-3.5 h-3.5 transition-colors ${
               isWishlisted
-                ? 'fill-[#D8C3A5] text-[#D8C3A5]'
-                : 'text-[#EDEDED] stroke-[1.75]'
+                ? 'fill-[#8C7355] text-[#8C7355]'
+                : 'text-[#1A1A1A] stroke-[1.75]'
             }`}
           />
         </button>
 
         {/* Quick Editorial Tag */}
         {product.isNew && (
-          <div className="absolute top-3 left-3 bg-[#0D0D0D]/90 backdrop-blur-sm border border-[#2E2E2E] px-2.5 py-1 text-[10px] font-sans tracking-[0.2em] uppercase text-[#D8C3A5] font-medium">
+          <div className="absolute top-3 left-3 bg-[#1A1A1A]/90 backdrop-blur-sm border border-[#1A1A1A] px-2.5 py-1 text-[10px] font-sans tracking-[0.2em] uppercase text-[#FFFFFF] font-medium">
             New Arrival
           </div>
         )}
         {!product.isNew && product.isTrending && (
-          <div className="absolute top-3 left-3 bg-[#0D0D0D]/90 backdrop-blur-sm border border-[#2E2E2E] px-2.5 py-1 text-[10px] font-sans tracking-[0.2em] uppercase text-[#D8C3A5] font-medium">
+          <div className="absolute top-3 left-3 bg-[#FAF8F5]/90 backdrop-blur-sm border border-[#E8E2D9] px-2.5 py-1 text-[10px] font-sans tracking-[0.2em] uppercase text-[#8C7355] font-medium">
             Editor's Pick
           </div>
         )}
 
         {/* Hover Quick View Trigger bar */}
-        <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+        <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
           <button
             onClick={() => onQuickView(product)}
-            className="w-full py-2 bg-[#FFFFFF] text-[#0A0A0A] text-[11px] font-sans tracking-[0.16em] uppercase font-semibold hover:bg-[#D8C3A5] transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
+            className="w-full py-2 bg-[#FFFFFF] text-[#1A1A1A] text-[11px] font-sans tracking-[0.16em] uppercase font-semibold hover:bg-[#FAF8F5] transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
           >
             <Eye className="w-3.5 h-3.5" />
             <span>Quick View</span>
@@ -100,61 +100,61 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       </div>
 
       {/* Product Information Area */}
-      <div className="p-5 flex flex-col justify-between flex-grow bg-[#121212]">
+      <div className="p-5 flex flex-col justify-between flex-grow bg-[#FFFFFF]">
         <div>
           {/* Brand & Category in muted unboxed text */}
-          <div className="flex items-center gap-2 text-[11px] font-sans tracking-[0.16em] uppercase text-[#8E8E8E] mb-1.5">
+          <div className="flex items-center gap-2 text-[11px] font-sans tracking-[0.16em] uppercase text-[#7A7570] mb-1.5">
             <span>{product.brand}</span>
-            <span aria-hidden="true" className="text-[#444444]">·</span>
-            <span className="text-[#D8C3A5]">{product.category}</span>
+            <span aria-hidden="true" className="text-[#D5CCC0]">·</span>
+            <span className="text-[#8C7355]">{product.category}</span>
           </div>
 
           {/* Product Title */}
           <h3
             onClick={() => onQuickView(product)}
-            className="font-serif text-lg text-[#FFFFFF] font-normal leading-snug line-clamp-1 hover:text-[#D8C3A5] cursor-pointer transition-colors mb-2"
+            className="font-serif text-lg text-[#1A1A1A] font-normal leading-snug line-clamp-1 hover:text-[#8C7355] cursor-pointer transition-colors mb-2"
           >
             {product.title}
           </h3>
 
           {/* Material note */}
-          <p className="text-[12px] font-sans text-[#A3A3A3] font-light line-clamp-1 mb-3">
+          <p className="text-[12px] font-sans text-[#666666] font-light line-clamp-1 mb-3">
             {product.material}
           </p>
         </div>
 
         <div>
           {/* Price & Rating Row */}
-          <div className="pt-3 border-t border-[#222222] flex items-center justify-between mb-4">
+          <div className="pt-3 border-t border-[#E8E2D9] flex items-center justify-between mb-4">
             <div className="flex items-baseline gap-2">
-              <span className="font-sans text-base font-semibold tabular-nums text-[#FFFFFF]">
+              <span className="font-sans text-base font-semibold tabular-nums text-[#1A1A1A]">
                 ${product.price.toFixed(2)}
               </span>
               {product.originalPrice && product.originalPrice > product.price && (
-                <span className="font-sans text-xs line-through tabular-nums text-[#666666]">
+                <span className="font-sans text-xs line-through tabular-nums text-[#999999]">
                   ${product.originalPrice.toFixed(2)}
                 </span>
               )}
             </div>
 
-            <div className="flex items-center gap-1 text-xs text-[#D8C3A5]">
-              <Star className="w-3 h-3 fill-[#D8C3A5] text-[#D8C3A5]" />
-              <span className="font-sans tabular-nums text-[11px] font-medium text-[#FFFFFF]">
+            <div className="flex items-center gap-1 text-xs text-[#8C7355]">
+              <Star className="w-3 h-3 fill-[#8C7355] text-[#8C7355]" />
+              <span className="font-sans tabular-nums text-[11px] font-medium text-[#1A1A1A]">
                 {product.rating}
               </span>
-              <span className="text-[#777777] text-[10px]">
+              <span className="text-[#888888] text-[10px]">
                 ({product.reviewCount})
               </span>
             </div>
           </div>
 
-          {/* Amazon Affiliate Button: White background with black text (hover champagne) */}
+          {/* Amazon Affiliate Button */}
           <a
             href={product.amazonUrl}
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="w-full py-2.5 px-4 bg-[#FFFFFF] text-[#0A0A0A] hover:bg-[#D8C3A5] hover:text-[#0A0A0A] text-xs font-sans tracking-[0.16em] uppercase font-semibold transition-colors duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-md"
+            className="w-full py-2.5 px-4 bg-[#1A1A1A] text-[#FFFFFF] hover:bg-[#333333] text-xs font-sans tracking-[0.16em] uppercase font-semibold transition-colors duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-xs"
           >
             <span>Shop on Amazon</span>
             <ExternalLink className="w-3.5 h-3.5" />

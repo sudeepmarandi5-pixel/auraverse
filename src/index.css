@@ -4,20 +4,20 @@
   --font-serif: "Cormorant Garamond", Georgia, Cambria, serif;
   --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
-  --color-editorial-black: #0A0A0A;
-  --color-editorial-dark: #121212;
-  --color-editorial-surface: #161616;
-  --color-editorial-border: #262626;
-  --color-editorial-beige: #D8C3A5;
-  --color-editorial-beige-light: #1C1917;
-  --color-editorial-beige-border: #2E2822;
+  --color-editorial-black: #1A1A1A;
+  --color-editorial-dark: #2A2A2A;
+  --color-editorial-surface: #FFFFFF;
+  --color-editorial-border: #E8E2D9;
+  --color-editorial-beige: #C5A880;
+  --color-editorial-beige-light: #FAF8F5;
+  --color-editorial-beige-border: #E2DAD0;
 }
 
 @layer base {
   body {
     font-family: var(--font-sans);
-    color: #EDEDED;
-    background-color: #0A0A0A;
+    color: #1A1A1A;
+    background-color: #FAF8F5;
   }
 
   h1, h2, h3, .font-serif {
@@ -25,21 +25,21 @@
   }
 }
 
-/* Custom dark editorial scrollbars */
+/* Custom editorial scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0D0D0D;
+  background: #F0EBE1;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #262626;
+  background: #D5CCC0;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #D8C3A5;
+  background: #C5A880;
 }
