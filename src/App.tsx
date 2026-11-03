@@ -5,9 +5,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Product, Category, BannerSettings } from './types';
+import { INITIAL_BANNER_SETTINGS } from './data/initialData';
 import { StoreService } from './services/storeService';
 import { Header } from './components/Header';
-import { HeroBanner } from './components/HeroBanner';
 import { CategoryGrid } from './components/CategoryGrid';
 import { TrendingArrivals } from './components/TrendingArrivals';
 import { FeaturedEditorial } from './components/FeaturedEditorial';
@@ -32,7 +32,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 export default function App() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [bannerSettings, setBannerSettings] = useState<BannerSettings | null>(null);
+  const [bannerSettings, setBannerSettings] = useState<BannerSettings>(INITIAL_BANNER_SETTINGS);
   const [wishlist, setWishlist] = useState<string[]>([]);
 
   // Navigation & filtering state
@@ -230,7 +230,7 @@ export default function App() {
     showToast('Signed out of Editor Portal');
   };
 
-  if (!bannerSettings) {
+  if (products.length === 0 && categories.length === 0) {
     return (
       <div className="min-h-screen bg-[#FAF8F5] flex items-center justify-center">
         <div className="text-center space-y-3">
@@ -256,18 +256,11 @@ export default function App() {
         wishlistCount={wishlist.length}
         isAdmin={isAdminAuthenticated}
         onOpenAdmin={() => setIsAdminOpen(true)}
-        announcementText={bannerSettings.announcement}
+        announcementText={bannerSettings?.announcement}
       />
 
       {/* Main Editorial Content */}
       <main className="flex-grow">
-        {/* Hero Section */}
-        <HeroBanner
-          settings={bannerSettings}
-          onExplore={() => handleNavigate('editorial')}
-          onViewTrending={() => handleNavigate('trending')}
-        />
-
         {/* Shop by Category */}
         <CategoryGrid
           categories={categories}
