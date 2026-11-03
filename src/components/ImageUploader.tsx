@@ -26,7 +26,7 @@ interface ImageUploaderProps {
   value: string;
   onChange: (url: string) => void;
   folder?: string;
-  aspectRatio?: '3/4' | '4/3' | '16/9' | '1/1';
+  aspectRatio?: '3/4' | '4/3' | '16/9' | '2/1' | '1/1';
   helperText?: string;
   required?: boolean;
 }
@@ -106,7 +106,9 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   };
 
   const aspectClass =
-    aspectRatio === '16/9'
+    aspectRatio === '2/1'
+      ? 'aspect-[2/1]'
+      : aspectRatio === '16/9'
       ? 'aspect-[16/9]'
       : aspectRatio === '4/3'
       ? 'aspect-[4/3]'

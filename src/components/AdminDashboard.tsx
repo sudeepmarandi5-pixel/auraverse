@@ -751,8 +751,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       value={bannerForm.imageUrl}
                       onChange={(url) => setBannerForm({ ...bannerForm, imageUrl: url })}
                       folder="banner"
-                      aspectRatio="16/9"
-                      helperText="Recommended 16:9 high-resolution landscape photograph for the homepage hero spread"
+                      aspectRatio="2/1"
+                      helperText="Recommended 2:1 or 16:9 high-resolution landscape banner for the homepage hero spread"
                       required
                     />
 

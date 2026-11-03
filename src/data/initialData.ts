@@ -334,11 +334,11 @@ export const INITIAL_PRODUCTS: Product[] = [
 ];
 
 export const INITIAL_BANNER_SETTINGS: BannerSettings = {
-  issueNumber: 'AUTUMN / WINTER 2026 · ISSUE N° 04',
-  headline: 'The Art of Restrained Luxury',
-  subheadline: 'An editorial curation of sculptural silhouettes, tactile cashmere, and timeless monochromatic tailoring designed for the contemporary wardrobe.',
-  ctaText: 'Explore The Edit',
+  issueNumber: 'NEW SEASON · AUTUMN / WINTER 2026',
+  headline: "Women's Fashion Curation",
+  subheadline: 'Discover the latest collection of dresses, sarees, ethnic couture, and contemporary casual wear curated with premium elegance.',
+  ctaText: 'Shop the Collection',
   ctaLink: '#trending',
-  imageUrl: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1600&auto=format&fit=crop',
-  announcement: 'Complimentary Curated Lookbook · Premium Amazon Prime Wardrobe Deliveries · Autumn / Winter 2026',
+  imageUrl: '/assets/aistudio/Auraverse_Women_s_Fashion_Collection_3900be99.png',
+  announcement: "✨ New Season Women's Fashion · Dresses, Sarees, Ethnic & Casual Wear · Amazon Prime Wardrobe",
 };

@@ -251,13 +251,25 @@ export class StoreService {
 
   // --- Banner Settings ---
   static async getBannerSettings(): Promise<BannerSettings> {
+    const bannerPath = '/assets/aistudio/Auraverse_Women_s_Fashion_Collection_3900be99.png';
     if (isFirebaseConfigured && db) {
       try {
         const snap = await getDoc(doc(db, 'settings', 'banner'));
         if (snap.exists()) {
           const data = snap.data() as BannerSettings;
+          if (!data.imageUrl || data.imageUrl.includes('unsplash.com')) {
+            data.imageUrl = bannerPath;
+            data.headline = "Women's Fashion Curation";
+            data.subheadline = 'Discover the latest collection of dresses, sarees, ethnic couture, and contemporary western wear curated with premium elegance.';
+            data.ctaText = 'Shop the Collection';
+            setDoc(doc(db, 'settings', 'banner'), data, { merge: true }).catch(() => {});
+          }
           localStorage.setItem(BANNER_STORAGE_KEY, JSON.stringify(data));
           return data;
+        } else {
+          await setDoc(doc(db, 'settings', 'banner'), INITIAL_BANNER_SETTINGS, { merge: true });
+          localStorage.setItem(BANNER_STORAGE_KEY, JSON.stringify(INITIAL_BANNER_SETTINGS));
+          return INITIAL_BANNER_SETTINGS;
         }
       } catch (err) {
         handleFirestoreError(err, OperationType.GET, 'settings/banner');
@@ -267,7 +279,12 @@ export class StoreService {
     const local = localStorage.getItem(BANNER_STORAGE_KEY);
     if (local) {
       try {
-        return JSON.parse(local);
+        const parsed = JSON.parse(local);
+        if (!parsed.imageUrl || parsed.imageUrl.includes('unsplash.com')) {
+          parsed.imageUrl = bannerPath;
+        }
+        localStorage.setItem(BANNER_STORAGE_KEY, JSON.stringify(parsed));
+        return parsed;
       } catch {
         // fallback
       }
