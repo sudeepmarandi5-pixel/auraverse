@@ -53,17 +53,17 @@ export const TrendingArrivals: React.FC<TrendingArrivalsProps> = ({
   }, [products, selectedCategorySlug, activeTab, sortBy]);
 
   return (
-    <section id="trending" className="w-full bg-[#FFFFFF] py-16 md:py-24 border-b border-[#E8DFD3]">
+    <section id="trending" className="w-full bg-[#0A0A0A] py-16 md:py-24 border-b border-[#222222]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-6 border-b border-[#E8DFD3] gap-4">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-6 border-b border-[#222222] gap-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-sans tracking-[0.2em] text-[#171717]/70 uppercase mb-2">
+            <div className="flex items-center gap-2 text-xs font-sans tracking-[0.2em] text-[#D8C3A5] uppercase mb-2">
               <span className="w-4 h-[1px] bg-[#D8C3A5]"></span>
               <span>Curated Selection</span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-4xl text-[#171717] font-normal tracking-tight">
+            <h2 className="font-serif text-3xl sm:text-4xl text-[#FFFFFF] font-normal tracking-tight">
               {selectedCategorySlug
                 ? `Category: ${selectedCategorySlug.toUpperCase()}`
                 : 'Trending Fashion & Latest Arrivals'}
@@ -73,13 +73,13 @@ export const TrendingArrivals: React.FC<TrendingArrivalsProps> = ({
           {/* Interactive Filter Tabs & Sort Control */}
           <div className="flex flex-wrap items-center gap-3">
             {/* Filter buttons segmented */}
-            <div className="inline-flex items-center p-1 bg-[#F5F0E8] border border-[#E8DFD3] rounded-sm">
+            <div className="inline-flex items-center p-1 bg-[#141414] border border-[#262626] rounded-sm">
               <button
                 onClick={() => setActiveTab('all')}
                 className={`px-3 py-1.5 text-xs font-sans tracking-[0.12em] uppercase font-medium transition-colors cursor-pointer ${
                   activeTab === 'all'
-                    ? 'bg-white text-[#171717] shadow-xs'
-                    : 'text-[#171717]/70 hover:text-[#171717]'
+                    ? 'bg-[#D8C3A5] text-[#0A0A0A] font-semibold shadow-xs'
+                    : 'text-[#A3A3A3] hover:text-[#FFFFFF]'
                 }`}
               >
                 All Pieces
@@ -88,8 +88,8 @@ export const TrendingArrivals: React.FC<TrendingArrivalsProps> = ({
                 onClick={() => setActiveTab('trending')}
                 className={`px-3 py-1.5 text-xs font-sans tracking-[0.12em] uppercase font-medium transition-colors cursor-pointer ${
                   activeTab === 'trending'
-                    ? 'bg-white text-[#171717] shadow-xs'
-                    : 'text-[#171717]/70 hover:text-[#171717]'
+                    ? 'bg-[#D8C3A5] text-[#0A0A0A] font-semibold shadow-xs'
+                    : 'text-[#A3A3A3] hover:text-[#FFFFFF]'
                 }`}
               >
                 Trending
@@ -98,8 +98,8 @@ export const TrendingArrivals: React.FC<TrendingArrivalsProps> = ({
                 onClick={() => setActiveTab('new')}
                 className={`px-3 py-1.5 text-xs font-sans tracking-[0.12em] uppercase font-medium transition-colors cursor-pointer ${
                   activeTab === 'new'
-                    ? 'bg-white text-[#171717] shadow-xs'
-                    : 'text-[#171717]/70 hover:text-[#171717]'
+                    ? 'bg-[#D8C3A5] text-[#0A0A0A] font-semibold shadow-xs'
+                    : 'text-[#A3A3A3] hover:text-[#FFFFFF]'
                 }`}
               >
                 Latest In
@@ -112,25 +112,25 @@ export const TrendingArrivals: React.FC<TrendingArrivalsProps> = ({
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
                 aria-label="Sort products"
-                className="appearance-none bg-white border border-[#E8DFD3] px-3 py-2 pr-8 text-xs font-sans tracking-[0.12em] uppercase text-[#171717] rounded-sm focus:outline-none focus:border-[#D8C3A5] cursor-pointer"
+                className="appearance-none bg-[#141414] border border-[#262626] px-3 py-2 pr-8 text-xs font-sans tracking-[0.12em] uppercase text-[#EDEDED] rounded-sm focus:outline-none focus:border-[#D8C3A5] cursor-pointer"
               >
                 <option value="featured">Sort: Featured</option>
                 <option value="price-asc">Price: Low to High</option>
                 <option value="price-desc">Price: High to Low</option>
                 <option value="rating">Highest Rated</option>
               </select>
-              <ArrowUpDown className="w-3.5 h-3.5 text-[#171717]/50 absolute right-2.5 pointer-events-none" />
+              <ArrowUpDown className="w-3.5 h-3.5 text-[#8E8E8E] absolute right-2.5 pointer-events-none" />
             </div>
           </div>
         </div>
 
         {/* Selected Category Notice Banner */}
         {selectedCategorySlug && (
-          <div className="mb-8 p-4 bg-[#F5F0E8] border border-[#D8C3A5] flex items-center justify-between text-xs font-sans tracking-[0.12em] uppercase text-[#171717]">
-            <span>Filtering by category: <strong>{selectedCategorySlug}</strong> ({filteredProducts.length} items)</span>
+          <div className="mb-8 p-4 bg-[#141414] border border-[#2E2E2E] flex items-center justify-between text-xs font-sans tracking-[0.12em] uppercase text-[#EDEDED]">
+            <span>Filtering by category: <strong className="text-[#D8C3A5]">{selectedCategorySlug}</strong> ({filteredProducts.length} items)</span>
             <button
               onClick={onClearCategory}
-              className="text-[#171717] underline decoration-[#D8C3A5] hover:opacity-75 font-semibold"
+              className="text-[#D8C3A5] underline decoration-[#D8C3A5]/60 hover:opacity-80 font-semibold cursor-pointer"
             >
               Reset to all categories
             </button>
@@ -139,9 +139,9 @@ export const TrendingArrivals: React.FC<TrendingArrivalsProps> = ({
 
         {/* Product Grid */}
         {filteredProducts.length === 0 ? (
-          <div className="py-20 text-center bg-[#F5F0E8] border border-[#E8DFD3] p-12">
-            <p className="font-serif text-2xl text-[#171717] mb-2">No garments found in this view</p>
-            <p className="text-xs font-sans text-[#171717]/60 tracking-[0.12em] uppercase mb-6">
+          <div className="py-20 text-center bg-[#121212] border border-[#262626] p-12">
+            <p className="font-serif text-2xl text-[#FFFFFF] mb-2">No garments found in this view</p>
+            <p className="text-xs font-sans text-[#8E8E8E] tracking-[0.12em] uppercase mb-6">
               Try adjusting your active category or filter settings.
             </p>
             <button
@@ -149,7 +149,7 @@ export const TrendingArrivals: React.FC<TrendingArrivalsProps> = ({
                 setActiveTab('all');
                 onClearCategory();
               }}
-              className="px-6 py-2.5 bg-[#171717] text-white text-xs font-sans tracking-[0.16em] uppercase hover:bg-neutral-800"
+              className="px-6 py-2.5 bg-[#FFFFFF] text-[#0A0A0A] font-semibold text-xs font-sans tracking-[0.16em] uppercase hover:bg-[#D8C3A5] transition-colors cursor-pointer"
             >
               View Full Collection
             </button>

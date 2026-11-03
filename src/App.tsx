@@ -232,12 +232,12 @@ export default function App() {
 
   if (!bannerSettings) {
     return (
-      <div className="min-h-screen bg-[#FFFFFF] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
         <div className="text-center space-y-3">
-          <div className="font-serif text-3xl tracking-[0.25em] text-[#171717] uppercase">
+          <div className="font-serif text-3xl tracking-[0.25em] text-[#FFFFFF] uppercase">
             YATRABABA
           </div>
-          <div className="text-xs font-sans tracking-[0.2em] text-[#171717]/60 uppercase">
+          <div className="text-xs font-sans tracking-[0.2em] text-[#D8C3A5] uppercase">
             Curating Editorial Wardrobe...
           </div>
         </div>
@@ -246,7 +246,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFFFFF] text-[#171717] flex flex-col font-sans selection:bg-[#D8C3A5] selection:text-[#171717]">
+    <div className="min-h-screen bg-[#0A0A0A] text-[#EDEDED] flex flex-col font-sans selection:bg-[#D8C3A5] selection:text-[#0A0A0A]">
       {/* Header & Sticky Navigation */}
       <Header
         activeSection={activeSection}
